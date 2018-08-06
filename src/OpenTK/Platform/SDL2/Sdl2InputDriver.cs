@@ -28,11 +28,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using OpenTK.Input;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2InputDriver : IInputDriver2
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+
         private readonly static Dictionary<IntPtr, Sdl2InputDriver> DriverHandles =
             new Dictionary<IntPtr, Sdl2InputDriver>();
 
@@ -52,18 +55,18 @@ namespace OpenTK.Platform.SDL2
         {
             lock (SDL.Sync)
             {
-                SDL.GameControllerEventState(EventState.Enable);
-                SDL.JoystickEventState(EventState.Enable);
+                SDL2.SDL_GameControllerEventState(EventState.Enable);
+                SDL2.SDL_JoystickEventState(EventState.Enable);
 
                 EventFilterDelegate = Marshal.GetFunctionPointerForDelegate(EventFilterDelegate_GCUnsafe);
                 driver_handle = new IntPtr(count++);
                 DriverHandles.Add(driver_handle, this);
-                SDL.AddEventWatch(EventFilterDelegate, driver_handle);
-                if (SDL.InitSubSystem(SystemFlags.JOYSTICK) < 0)
+                SDL2.SDL_AddEventWatch(EventFilterDelegate, driver_handle);
+                if (SDL2.SDL_InitSubSystem(SystemFlags.JOYSTICK) < 0)
                 {
                     Debug.Print("[SDL2] InputDriver failed to init Joystick subsystem. Error: {0}", SDL.GetError());
                 }
-                if (SDL.InitSubSystem(SystemFlags.GAMECONTROLLER) < 0)
+                if (SDL2.SDL_InitSubSystem(SystemFlags.GAMECONTROLLER) < 0)
                 {
                     Debug.Print("[SDL2] InputDriver failed to init GameController subsystem. Error: {0}", SDL.GetError());
                 }
@@ -189,7 +192,7 @@ namespace OpenTK.Platform.SDL2
                     joystick_driver.Dispose();
                     lock (SDL.Sync)
                     {
-                        SDL.DelEventWatch(EventFilterDelegate, driver_handle);
+                        SDL2.SDL_DelEventWatch(EventFilterDelegate, driver_handle);
                     }
                     DriverHandles.Remove(driver_handle);
                 }

@@ -28,11 +28,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using OpenTK.Input;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2JoystickDriver : IJoystickDriver2, IGamePadDriver, IDisposable
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+
         private const float RangeMultiplier =  1.0f / 32768.0f;
         private readonly MappedGamePadDriver gamepad_driver = new MappedGamePadDriver();
         private bool disposed;
@@ -85,19 +88,19 @@ namespace OpenTK.Platform.SDL2
             int num_hats = 0;
             int num_balls = 0;
 
-            IntPtr handle = SDL.JoystickOpen(id);
+            IntPtr handle = SDL2.SDL_JoystickOpen(id);
             if (handle != IntPtr.Zero)
             {
-                num_axes = SDL.JoystickNumAxes(handle);
-                num_buttons = SDL.JoystickNumButtons(handle);
-                num_hats = SDL.JoystickNumHats(handle);
-                num_balls = SDL.JoystickNumBalls(handle);
+                num_axes = SDL2.SDL_JoystickNumAxes(handle);
+                num_buttons = SDL2.SDL_JoystickNumButtons(handle);
+                num_hats = SDL2.SDL_JoystickNumHats(handle);
+                num_balls = SDL2.SDL_JoystickNumBalls(handle);
 
                 joystick = new JoystickDevice<Sdl2JoystickDetails>(id, num_axes, num_buttons);
                 joystick.Description = SDL.JoystickName(handle);
                 joystick.Details.Handle = handle;
-                joystick.Details.InstanceId = SDL.JoystickInstanceID(handle);
-                joystick.Details.Guid = SDL.JoystickGetGUID(handle).ToGuid();
+                joystick.Details.InstanceId = SDL2.SDL_JoystickInstanceID(handle);
+                joystick.Details.Guid = SDL2.SDL_JoystickGetGUID(handle).ToGuid();
                 joystick.Details.HatCount = num_hats;
                 joystick.Details.BallCount = num_balls;
 
@@ -324,7 +327,7 @@ namespace OpenTK.Platform.SDL2
             {
                 case EventType.JOYDEVICEADDED:
                     {
-                        IntPtr handle = SDL.JoystickOpen(id);
+                        IntPtr handle = SDL2.SDL_JoystickOpen(id);
                         if (handle != IntPtr.Zero)
                         {
                             JoystickDevice<Sdl2JoystickDetails> joystick = OpenJoystick(id);
@@ -675,7 +678,7 @@ namespace OpenTK.Platform.SDL2
                     {
                         var joystick = (JoystickDevice<Sdl2JoystickDetails>)j;
                         IntPtr handle = joystick.Details.Handle;
-                        SDL.JoystickClose(handle);
+                        SDL2.SDL_JoystickClose(handle);
                     }
 
                     joysticks.Clear();

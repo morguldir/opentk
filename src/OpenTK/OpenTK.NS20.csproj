@@ -701,6 +701,9 @@
     <Compile Include="Platform\MacOS\Cocoa\NSDragOperation.cs" />
     <Compile Include="Platform\MacOS\CoreVideo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AdvancedDLSupport" Version="2.1.0" />
+  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="$(MSBuildThisFileDirectory)..\Generator.Rewrite\bin\Debug\Rewrite.exe -a $(OutputPath)OpenTK.dll -k $(MSBuildThisFileDirectory)..\..\OpenTK.snk --debug --netstandard" Condition="$(OS) == 'Windows_NT' and $(Configuration) == 'Debug'" />
     <Exec Command="$(MSBuildThisFileDirectory)..\Generator.Rewrite\bin\Release\Rewrite.exe -a $(OutputPath)OpenTK.dll -k $(MSBuildThisFileDirectory)..\..\OpenTK.snk --netstandard" Condition="$(OS) == 'Windows_NT' and $(Configuration) == 'Release'" />

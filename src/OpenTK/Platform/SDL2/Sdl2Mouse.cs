@@ -26,11 +26,14 @@
 using System;
 using System.Diagnostics;
 using OpenTK.Input;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2Mouse : IMouseDriver2
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+       
         private MouseState state;
 
         public Sdl2Mouse()
@@ -125,7 +128,7 @@ namespace OpenTK.Platform.SDL2
         public MouseState GetCursorState()
         {
             int x, y;
-            var buttons = SDL.GetGlobalMouseState(out x, out y);
+            var buttons = SDL2.SDL_GetGlobalMouseState(out x, out y);
 
             if (Configuration.RunningOnMacOS)
             {
@@ -149,7 +152,7 @@ namespace OpenTK.Platform.SDL2
 
         public void SetPosition(double x, double y)
         {
-            SDL.WarpMouseGlobal((int)x, (int)y);
+            SDL2.SDL_WarpMouseGlobal((int)x, (int)y);
         }
     }
 }

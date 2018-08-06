@@ -24,11 +24,14 @@
 //
 
 using OpenTK.Input;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2Keyboard : IKeyboardDriver2
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+
         #pragma warning disable 649 // Field never assigned to, compiler bug in Mono 3.4.0
         private KeyboardState state;
         #pragma warning restore 649
@@ -48,7 +51,7 @@ namespace OpenTK.Platform.SDL2
         // Fixme: this does not appear to work as expected.
         private void UpdateModifiers()
         {
-            Keymod mod = SDL.GetModState();
+            Keymod mod = SDL2.SDL_GetModState();
 
             state[Key.LAlt] = (mod & Keymod.LALT) != 0;
             state[Key.RAlt] = (mod & Keymod.RALT) != 0;

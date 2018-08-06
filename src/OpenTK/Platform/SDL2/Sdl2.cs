@@ -27,7 +27,6 @@ using System;
 using System.Diagnostics;
 using System.Security;
 using System.Runtime.InteropServices;
-
 using AdvancedDLSupport;
 
 #pragma warning disable 0169
@@ -37,7 +36,7 @@ namespace OpenTK.Platform.SDL2
     using Surface = IntPtr;
     using Cursor = IntPtr;
 
-    public interface ISDL2
+    internal interface ISDL2 : IDisposable
     {
         Cursor SDL_CreateColorCursor(Surface surface, int hot_x, int hot_y);
 
@@ -123,7 +122,7 @@ namespace OpenTK.Platform.SDL2
 
         int SDL_GetDisplayMode(int displayIndex, int modeIndex, out DisplayMode mode);
 
-        IntPtr SDL_GameControllerName(IntPtr gamecontroller);
+        IntPtr SDL_GetError();
 
         Keymod SDL_GetModState();
 
@@ -176,8 +175,6 @@ namespace OpenTK.Platform.SDL2
 
         IntPtr SDL_JoystickName(IntPtr joystick);
 
-        IntPtr SDL_JoystickName(IntPtr joystick);
-
         int SDL_JoystickNumAxes(IntPtr joystick);
 
         int SDL_JoystickNumBalls(IntPtr joystick);
@@ -196,7 +193,7 @@ namespace OpenTK.Platform.SDL2
 
         int SDL_NumJoysticks();
 
-        /*unsafe*/ int SDL_PeepEvents(Event* e, int count, EventAction action, EventType min, EventType max);
+        unsafe int SDL_PeepEvents(Event* e, int count, EventAction action, EventType min, EventType max);
 
         bool SDL_PixelFormatEnumToMasks(uint format, out int bpp,
             out uint rmask, out uint gmask, out uint bmask, out uint amask);
@@ -264,16 +261,33 @@ namespace OpenTK.Platform.SDL2
 
     internal partial class SDL
     {
-        #if ANDROID
-        const string lib = "libSDL2.so";
-        #elif IPHONE
-        const string lib = "__Internal";
-        #else
-        private const string lib = "SDL2.dll";
-        #endif
+        internal static string GetSDLFileName()
+        {
+            #if NETSTANDARD
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return "SDL2.dll";
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return "libSDL2.dylib";
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return "libSDL2-2.0.so.0";
+            else
+                throw new PlatformNotSupportedException();
+            #elif ANDROID
+            return "libSDL2.so";
+            #elif IPHONE
+            return "__INTERNAL";
+            #else
+            return "SDL2.dll";
+            #endif
+        }
+
+        internal static string sdl_file_name = GetSDLFileName();
+
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(sdl_file_name);
 
         public readonly static object Sync = new object();
         private static Nullable<Version> version;
+
         public static Version Version
         {
             get
@@ -312,32 +326,32 @@ namespace OpenTK.Platform.SDL2
         {
             unsafe
             {
-                return new string((sbyte*)GameControllerNameInternal(gamecontroller));
+                return new string((sbyte*)SDL2.SDL_GameControllerName(gamecontroller));
             }
         }
 
         public static string GetError()
         {
-            return IntPtrToString(GetErrorInternal());
+            return IntPtrToString(SDL2.SDL_GetError());
         }
 
         public static Version GetVersion()
         {
             Version v;
-            GetVersion(out v);
+            SDL2.SDL_GetVersion(out v);
             return v;
         }
 
         public static string GetWindowTitle(IntPtr window)
         {
-            return Marshal.PtrToStringAnsi(GetWindowTitlePrivate(window));
+            return Marshal.PtrToStringAnsi(SDL2.SDL_GetWindowTitle(window));
         }
 
         public static string JoystickName(IntPtr joystick)
         {
             unsafe
             {
-                return new string((sbyte*)JoystickNameInternal(joystick));
+                return new string((sbyte*)SDL2.SDL_JoystickName(joystick));
             }
         }
 
@@ -347,7 +361,7 @@ namespace OpenTK.Platform.SDL2
             {
                 fixed (Event* pe = &e)
                 {
-                    return PeepEvents(pe, 1, action, min, max);
+                    return SDL2.SDL_PeepEvents(pe, 1, action, min, max);
                 }
             }
         }
@@ -367,7 +381,7 @@ namespace OpenTK.Platform.SDL2
             {
                 fixed (Event *pe = e)
                 {
-                    return PeepEvents(pe, count, action, min, max);
+                    return SDL2.SDL_PeepEvents(pe, count, action, min, max);
                 }
             }
         }
@@ -389,7 +403,7 @@ namespace OpenTK.Platform.SDL2
         {
             info = new SysWMInfo();
             info.Version = GetVersion();
-            return GetWindowWMInfoInternal(window, ref info);
+            return SDL2.SDL_GetWindowWMInfo(window, ref info);
         }
 
 
@@ -400,7 +414,7 @@ namespace OpenTK.Platform.SDL2
                 IntPtr p = Marshal.StringToHGlobalAnsi(proc);
                 try
                 {
-                    return GetProcAddress(p);
+                    return SDL2.SDL_GL_GetProcAddress(p);
                 }
                 finally
                 {
@@ -409,14 +423,12 @@ namespace OpenTK.Platform.SDL2
             }
             public static int SetAttribute(ContextAttribute attr, ContextFlags value)
             {
-                return SetAttribute(attr, (int)value);
+                return SDL2.SDL_GL_SetAttribute(attr, (int)value);
             }
             public static int SetAttribute(ContextAttribute attr, ContextProfileFlags value)
             {
-                return SetAttribute(attr, (int)value);
+                return SDL2.SDL_GL_SetAttribute(attr, (int)value);
             }
-
-
         }
     }
 

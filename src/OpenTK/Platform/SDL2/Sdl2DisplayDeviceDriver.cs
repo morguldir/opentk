@@ -25,28 +25,31 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2DisplayDeviceDriver : DisplayDeviceBase
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+
         public Sdl2DisplayDeviceDriver()
         {
-            int displays = SDL.GetNumVideoDisplays();
+            int displays = SDL2.SDL_GetNumVideoDisplays();
             for (int d = 0; d < displays; d++)
             {
                 Rect bounds;
-                SDL.GetDisplayBounds(d, out bounds);
+                SDL2.SDL_GetDisplayBounds(d, out bounds);
 
                 DisplayMode current_mode;
-                SDL.GetCurrentDisplayMode(d, out current_mode);
+                SDL2.SDL_GetCurrentDisplayMode(d, out current_mode);
 
                 var mode_list = new List<DisplayResolution>();
-                int num_modes = SDL.GetNumDisplayModes(d);
+                int num_modes = SDL2.SDL_GetNumDisplayModes(d);
                 for (int m = 0; m < num_modes; m++)
                 {
                     DisplayMode sdl_mode;
-                    SDL.GetDisplayMode(d, m, out sdl_mode);
+                    SDL2.SDL_GetDisplayMode(d, m, out sdl_mode);
                     mode_list.Add(new DisplayResolution(
                         bounds.X, bounds.Y,
                         sdl_mode.Width, sdl_mode.Height,
@@ -75,7 +78,7 @@ namespace OpenTK.Platform.SDL2
         {
             int bpp;
             uint a, r, g, b;
-            SDL.PixelFormatEnumToMasks(format, out bpp, out r, out g, out b, out a);
+            SDL2.SDL_PixelFormatEnumToMasks(format, out bpp, out r, out g, out b, out a);
             return bpp;
         }
 

@@ -30,11 +30,14 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using OpenTK.Input;
 using System.Text;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2NativeWindow : NativeWindowBase
     {
+        internal static ISDL2 SDL2 = NativeLibraryBuilder.Default.ActivateInterface<ISDL2>(SDL.sdl_file_name);
+
         private readonly object sync = new object();
 
         private Sdl2WindowInfo window;
@@ -66,7 +69,7 @@ namespace OpenTK.Platform.SDL2
         {
             lock (sync)
             {
-                SDL.DisableScreenSaver();
+                SDL2.SDL_DisableScreenSaver();
 
                 var bounds = device.Bounds;
                 var flags = TranslateFlags(options);
@@ -91,12 +94,12 @@ namespace OpenTK.Platform.SDL2
                 IntPtr handle;
                 lock (SDL.Sync)
                 {
-                    handle = SDL.CreateWindow(title, bounds.Left + x, bounds.Top + y, width, height, flags);
+                    handle = SDL2.SDL_CreateWindow(title, bounds.Left + x, bounds.Top + y, width, height, flags);
                     exists = true;
                 }
                 ProcessEvents();
                 window = new Sdl2WindowInfo(handle, null);
-                window_id = SDL.GetWindowID(handle);
+                window_id = SDL2.SDL_GetWindowID(handle);
                 windows.Add(window_id, this);
             }
         }
@@ -132,7 +135,7 @@ namespace OpenTK.Platform.SDL2
 
         private static Key TranslateKey(Keycode key)
         {
-            Scancode scan = SDL.GetScancodeFromKey(key);
+            Scancode scan = SDL2.SDL_GetScancodeFromKey(key);
             return TranslateKey(scan);
         }
 
@@ -200,7 +203,7 @@ namespace OpenTK.Platform.SDL2
                         if (windows.TryGetValue(ev.Drop.WindowID, out window))
                         {
                             ProcessDropEvent(window, ev.Drop);
-                            SDL.Free(ev.Drop.File);
+                            SDL2.SDL_Free(ev.Drop.File);
                             processed = true;
                         }
                         break;
@@ -226,7 +229,7 @@ namespace OpenTK.Platform.SDL2
             // outside the window. SetWindowGrab ensures we get them.
             if (!window.is_cursor_grabbed)
             {
-                SDL.SetWindowGrab(window.window.Handle,
+                SDL2.SDL_SetWindowGrab(window.window.Handle,
                     button_pressed ? true : false);
             }
 
@@ -408,7 +411,7 @@ namespace OpenTK.Platform.SDL2
                     {
                         windows.Remove(window_id);
                     }
-                    SDL.DestroyWindow(window.Handle);
+                    SDL2.SDL_DestroyWindow(window.Handle);
                 }
             }
 
@@ -418,20 +421,20 @@ namespace OpenTK.Platform.SDL2
 
         private void SetCursorGrab(bool shouldGrab)
         {
-            SDL.SetWindowGrab(window.Handle, shouldGrab);
+            SDL2.SDL_SetWindowGrab(window.Handle, shouldGrab);
         }
 
         private void SetCursorVisible(bool shouldVisible)
         {
-            SDL.ShowCursor(shouldVisible);
+            SDL2.SDL_ShowCursor(shouldVisible);
         }
 
         // Hack to force WindowState events to be pumped
         private void HideShowWindowHack()
         {
-            SDL.HideWindow(window.Handle);
+            SDL2.SDL_HideWindow(window.Handle);
             ProcessEvents();
-            SDL.ShowWindow(window.Handle);
+            SDL2.SDL_ShowWindow(window.Handle);
             ProcessEvents();
         }
 
@@ -443,16 +446,16 @@ namespace OpenTK.Platform.SDL2
             switch (state)
             {
                 case WindowState.Fullscreen:
-                    SDL.SetWindowFullscreen(window.Handle, 0);
+                    SDL2.SDL_SetWindowFullscreen(window.Handle, 0);
                     break;
 
                 case WindowState.Maximized:
-                    SDL.RestoreWindow(window.Handle);
+                    SDL2.SDL_RestoreWindow(window.Handle);
                     HideShowWindowHack();
                     break;
 
                 case WindowState.Minimized:
-                    SDL.RestoreWindow(window.Handle);
+                    SDL2.SDL_RestoreWindow(window.Handle);
                     break;
             }
 
@@ -477,7 +480,7 @@ namespace OpenTK.Platform.SDL2
                         // if one has been set.
                         if (sdl_cursor != IntPtr.Zero)
                         {
-                            SDL.FreeCursor(sdl_cursor);
+                            SDL2.SDL_FreeCursor(sdl_cursor);
                             sdl_cursor = IntPtr.Zero;
                         }
 
@@ -485,7 +488,7 @@ namespace OpenTK.Platform.SDL2
                         if (value == MouseCursor.Default)
                         {
                             // Reset to default cursor
-                            SDL.SetCursor(SDL.GetDefaultCursor());
+                            SDL2.SDL_SetCursor(SDL2.SDL_GetDefaultCursor());
                             cursor = value;
                         }
                         else
@@ -497,7 +500,7 @@ namespace OpenTK.Platform.SDL2
                                 fixed (byte* pixels = value.Data)
                                 {
                                     IntPtr cursor_surface =
-                                        SDL.CreateRGBSurfaceFrom(
+                                        SDL2.SDL_CreateRGBSurfaceFrom(
                                             new IntPtr(pixels),
                                             value.Width,
                                             value.Height,
@@ -515,7 +518,7 @@ namespace OpenTK.Platform.SDL2
                                         return;
                                     }
 
-                                    sdl_cursor = SDL.CreateColorCursor(cursor_surface, value.X, value.Y);
+                                    sdl_cursor = SDL2.SDL_CreateColorCursor(cursor_surface, value.X, value.Y);
                                     if (sdl_cursor == IntPtr.Zero)
                                     {
                                         Debug.Print("[SDL2] Failed to create cursor. Error: {0}",
@@ -525,13 +528,13 @@ namespace OpenTK.Platform.SDL2
 
                                     if (sdl_cursor != IntPtr.Zero)
                                     {
-                                        SDL.SetCursor(sdl_cursor);
+                                        SDL2.SDL_SetCursor(sdl_cursor);
                                         cursor = value;
                                     }
 
                                     if (cursor_surface != IntPtr.Zero)
                                     {
-                                        SDL.FreeSurface(cursor_surface);
+                                        SDL2.SDL_FreeSurface(cursor_surface);
                                     }
                                 }
                             }
@@ -555,7 +558,7 @@ namespace OpenTK.Platform.SDL2
                     e.Window.WindowID = window_id;
                     lock (SDL.Sync)
                     {
-                        SDL.PushEvent(ref e);
+                        SDL2.SDL_PushEvent(ref e);
                     }
                 }
             }
@@ -568,9 +571,9 @@ namespace OpenTK.Platform.SDL2
             {
                 if (Exists)
                 {
-                    SDL.PumpEvents();
+                    SDL2.SDL_PumpEvents();
                     Event e;
-                    while (SDL.PollEvent(out e) > 0)
+                    while (SDL2.SDL_PollEvent(out e) > 0)
                     {
                         ProcessEvent(ref e);
                     }
@@ -619,15 +622,15 @@ namespace OpenTK.Platform.SDL2
                                     ImageLockMode.ReadWrite,
                                     PixelFormat.Format32bppArgb);
 
-                                IntPtr surface = SDL.CreateRGBSurfaceFrom(
+                                IntPtr surface = SDL2.SDL_CreateRGBSurfaceFrom(
                                     data.Scan0, data.Width, data.Height, 32, data.Stride,
                                     0x00ff0000u, 0x0000ff00u, 0x000000ffu, 0xff000000u);
 
                                 // Update the window icon
-                                SDL.SetWindowIcon(window.Handle, surface);
+                                SDL2.SDL_SetWindowIcon(window.Handle, surface);
 
                                 // Free the SDL surface as it is no longer needed
-                                SDL.FreeSurface(surface);
+                                SDL2.SDL_FreeSurface(surface);
                                 bmp.UnlockBits(data);
                             }
 
@@ -635,7 +638,7 @@ namespace OpenTK.Platform.SDL2
                         else
                         {
                             // Clear the window icon
-                            SDL.SetWindowIcon(window.Handle, IntPtr.Zero);
+                            SDL2.SDL_SetWindowIcon(window.Handle, IntPtr.Zero);
                         }
 
                         icon = value;
@@ -664,7 +667,7 @@ namespace OpenTK.Platform.SDL2
                 {
                     if (Exists)
                     {
-                        SDL.SetWindowTitle(window.Handle, value);
+                        SDL2.SDL_SetWindowTitle(window.Handle, value);
                     }
                 }
             }
@@ -692,11 +695,11 @@ namespace OpenTK.Platform.SDL2
                     {
                         if (value)
                         {
-                            SDL.ShowWindow(window.Handle);
+                            SDL2.SDL_ShowWindow(window.Handle);
                         }
                         else
                         {
-                            SDL.HideWindow(window.Handle);
+                            SDL2.SDL_HideWindow(window.Handle);
                         }
                     }
                 }
@@ -739,15 +742,15 @@ namespace OpenTK.Platform.SDL2
                                 case WindowState.Fullscreen:
                                     RestoreWindow();
                                     bool success = Sdl2Factory.UseFullscreenDesktop ?
-                                        SDL.SetWindowFullscreen(window.Handle, (uint)WindowFlags.FULLSCREEN_DESKTOP) < 0 :
-                                        SDL.SetWindowFullscreen(window.Handle, (uint)WindowFlags.FULLSCREEN) < 0;
+                                        SDL2.SDL_SetWindowFullscreen(window.Handle, (uint)WindowFlags.FULLSCREEN_DESKTOP) < 0 :
+                                        SDL2.SDL_SetWindowFullscreen(window.Handle, (uint)WindowFlags.FULLSCREEN) < 0;
 
                                     if (!success)
                                     {
-                                            Debug.Print("SDL2 failed to enter fullscreen mode: {0}", SDL.GetError());
+                                            Debug.Print("SDL2 failed to enter fullscreen mode: {0}", SDL2.SDL_GetError());
                                     }
 
-                                    SDL.RaiseWindow(window.Handle);
+                                    SDL2.SDL_RaiseWindow(window.Handle);
                                     // There is no "fullscreen" message in the event loop
                                     // so we have to mark that ourselves
                                     window_state = WindowState.Fullscreen;
@@ -755,12 +758,12 @@ namespace OpenTK.Platform.SDL2
 
                                 case WindowState.Maximized:
                                     RestoreWindow();
-                                    SDL.MaximizeWindow(window.Handle);
+                                    SDL2.SDL_MaximizeWindow(window.Handle);
                                     window_state = WindowState.Maximized;
                                     break;
 
                                 case WindowState.Minimized:
-                                    SDL.MinimizeWindow(window.Handle);
+                                    SDL2.SDL_MinimizeWindow(window.Handle);
                                     window_state = WindowState.Minimized;
                                     break;
 
@@ -797,12 +800,12 @@ namespace OpenTK.Platform.SDL2
                             switch (value)
                             {
                                 case WindowBorder.Resizable:
-                                    SDL.SetWindowBordered(window.Handle, true);
+                                    SDL2.SDL_SetWindowBordered(window.Handle, true);
                                     window_border = WindowBorder.Resizable;
                                     break;
 
                                 case WindowBorder.Hidden:
-                                    SDL.SetWindowBordered(window.Handle, false);
+                                    SDL2.SDL_SetWindowBordered(window.Handle, false);
                                     window_border = WindowBorder.Hidden;
                                     break;
 
@@ -843,7 +846,7 @@ namespace OpenTK.Platform.SDL2
                     if (Exists)
                     {
                         int x, y;
-                        SDL.GetWindowPosition(window.Handle, out x, out y);
+                        SDL2.SDL_GetWindowPosition(window.Handle, out x, out y);
                         return new Point(x, y);
                     }
                     return new Point();
@@ -855,7 +858,7 @@ namespace OpenTK.Platform.SDL2
                 {
                     if (Exists)
                     {
-                        SDL.SetWindowPosition(window.Handle, value.X, value.Y);
+                        SDL2.SDL_SetWindowPosition(window.Handle, value.X, value.Y);
                     }
                 }
             }
@@ -870,7 +873,7 @@ namespace OpenTK.Platform.SDL2
                     if (Exists)
                     {
                         int w, h;
-                        SDL.GetWindowSize(window.Handle, out w, out h);
+                        SDL2.SDL_GetWindowSize(window.Handle, out w, out h);
                         return new Size(w, h);
                     }
                     return new Size();
@@ -882,7 +885,7 @@ namespace OpenTK.Platform.SDL2
                 {
                     if (Exists)
                     {
-                        SDL.SetWindowSize(window.Handle, value.Width, value.Height);
+                        SDL2.SDL_SetWindowSize(window.Handle, value.Width, value.Height);
                     }
                 }
             }
@@ -897,11 +900,11 @@ namespace OpenTK.Platform.SDL2
                 {
                     // SDL > 2.0.0 supports SDL_GL_GetDrawableSize for
                     // hidpi windows.
-                    SDL.GL.GetDrawableSize(window.Handle, out w, out h);
+                    SDL2.SDL_GL_GetDrawableSize(window.Handle, out w, out h);
                 }
                 else
                 {
-                    SDL.GetWindowSize(window.Handle, out w, out h);
+                    SDL2.SDL_GetWindowSize(window.Handle, out w, out h);
                 }
                 return new Size(w, h);
             }
@@ -969,7 +972,7 @@ namespace OpenTK.Platform.SDL2
 
                         if (sdl_cursor != IntPtr.Zero)
                         {
-                            SDL.FreeCursor(sdl_cursor);
+                            SDL2.SDL_FreeCursor(sdl_cursor);
                             sdl_cursor = IntPtr.Zero;
                         }
                     }
@@ -992,4 +995,3 @@ namespace OpenTK.Platform.SDL2
         }
     }
 }
-
