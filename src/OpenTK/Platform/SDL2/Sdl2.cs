@@ -405,7 +405,15 @@ namespace OpenTK.Platform.SDL2
             info.Version = GetVersion();
             return SDL2.SDL_GetWindowWMInfo(window, ref info);
         }
+        public static bool WasInit(SystemFlags flags)
+        {
+            return SDL2.SDL_WasInit(flags);
+        }
 
+        public static int Init(SystemFlags flags)
+        {
+            return SDL2.SDL_Init(flags);
+        }
 
         public partial class GL
         {

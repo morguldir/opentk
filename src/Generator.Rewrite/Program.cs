@@ -106,6 +106,7 @@ namespace OpenTK.Rewrite
                 }
 
                 resolver.AddSearchDirectory(searchPath);
+                resolver.AddSearchDirectory("../../packages/AdvancedDLSupport/lib/netstandard2.0");
                 read_params.AssemblyResolver = resolver;
             }
 
@@ -172,16 +173,33 @@ namespace OpenTK.Rewrite
             }
         }
 
+        public class AssemblyDirectory
+        {
+            internal static string Dir = Environment.CurrentDirectory;
+            
+            internal static bool Exists()
+            {
+                while (!Directory.Exists(Path.Combine(Dir, "packages")) && !string.IsNullOrEmpty(Dir))
+                Dir = Dir.Substring(0, Dir.LastIndexOf(Path.DirectorySeparatorChar));
+
+                if (string.IsNullOrEmpty(Dir))
+                    return false;
+                return true;
+            }
+        }
+
         private string GetNetstandardRefPath()
         {
-            string dir = Environment.CurrentDirectory;
-            while (!Directory.Exists(Path.Combine(dir, "packages")) && !string.IsNullOrEmpty(dir))
-                dir = dir.Substring(0, dir.LastIndexOf(Path.DirectorySeparatorChar));
+            if(AssemblyDirectory.Exists())
+                return Path.Combine(AssemblyDirectory.Dir, "packages", "NETStandard.Library.2.0.1", "build", "netstandard2.0", "ref");
+            return string.Empty;
+        }
 
-            if (string.IsNullOrEmpty(dir))
-                return string.Empty;
-
-            return Path.Combine(dir, "packages", "NETStandard.Library.2.0.1", "build", "netstandard2.0", "ref");
+        private string GetAdvancedDLSupportPath()
+        {
+            if(AssemblyDirectory.Exists())
+                return Path.Combine(AssemblyDirectory.Dir, "packages", "AdvancedDLSupport", "lib", "netstandard2.0");
+            return string.Empty;
         }
 
         private void Rewrite(TypeDefinition type)

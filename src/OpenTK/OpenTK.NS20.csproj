@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>OpenTK</AssemblyName>
     <PackageVersion>1.0.4</PackageVersion>
@@ -701,8 +702,8 @@
     <Compile Include="Platform\MacOS\Cocoa\NSDragOperation.cs" />
     <Compile Include="Platform\MacOS\CoreVideo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AdvancedDLSupport" Version="2.1.0" />
+  <ItemGroup Label="Package References">
+    <PackageReference Include="AdvancedDLSupport" Version="2.1.2" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="$(MSBuildThisFileDirectory)..\Generator.Rewrite\bin\Debug\Rewrite.exe -a $(OutputPath)OpenTK.dll -k $(MSBuildThisFileDirectory)..\..\OpenTK.snk --debug --netstandard" Condition="$(OS) == 'Windows_NT' and $(Configuration) == 'Debug'" />
@@ -710,4 +711,5 @@
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Debug/Rewrite.exe -a $(OutputPath)OpenTK.dll --debug --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Debug'" />
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Release/Rewrite.exe -a $(OutputPath)OpenTK.dll --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Release'" />
   </Target>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
