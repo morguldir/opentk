@@ -203,7 +203,7 @@ namespace OpenTK.Platform.SDL2
                         if (windows.TryGetValue(ev.Drop.WindowID, out window))
                         {
                             ProcessDropEvent(window, ev.Drop);
-                            SDL2.SDL_Free(ev.Drop.File);
+                            SDL2.SDL_free(ev.Drop.File);
                             processed = true;
                         }
                         break;

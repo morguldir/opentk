@@ -27,10 +27,12 @@ using System;
 using System.Diagnostics;
 using System.Security;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using AdvancedDLSupport;
 
 #pragma warning disable 0169
 
+[assembly: InternalsVisibleTo("DLSupportDynamicAssembly")]
 namespace OpenTK.Platform.SDL2
 {
     using Surface = IntPtr;
@@ -66,7 +68,7 @@ namespace OpenTK.Platform.SDL2
 
         void SDL_FreeSurface(IntPtr surface);
 
-        void SDL_Free(IntPtr memblock);
+        void SDL_free(IntPtr memblock);
 
         EventState SDL_GameControllerEventState(EventState state);
 
