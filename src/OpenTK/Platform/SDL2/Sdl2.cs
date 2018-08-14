@@ -271,9 +271,9 @@ namespace OpenTK.Platform.SDL2
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 return "libSDL2.dylib";
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                return "libSDL2-2.0.so.0";
+                return "libSDL2-2.0.so";
             else
-                throw new PlatformNotSupportedException();
+                return "SDL2.dll";
             #elif ANDROID
             return "libSDL2.so";
             #elif IPHONE
