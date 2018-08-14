@@ -206,7 +206,7 @@ namespace OpenTK.Platform.Egl
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     return "libEGL.so.1";
                 else
-                    throw new PlatformNotSupportedException();
+                    return "libEGL.dll";
             #else
                 return "libEGL.dll";
             #endif
