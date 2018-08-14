@@ -31,6 +31,7 @@ namespace OpenTK.Platform.Egl
 {
     internal abstract class EglContext : EmbeddedGraphicsContext
     {
+        IEgl Egl = EglWrapper.CreateLibraryInterface();
         protected readonly RenderableFlags Renderable;
         internal EglWindowInfo WindowInfo;
 
@@ -78,9 +79,9 @@ namespace OpenTK.Platform.Egl
 
             RenderApi api = (Renderable & RenderableFlags.GL) != 0 ? RenderApi.GL : RenderApi.ES;
             Debug.Print("[EGL] Binding {0} rendering API.", api);
-            if (!Egl.BindAPI(api))
+            if (!Egl.eglBindAPI(api))
             {
-                Debug.Print("[EGL] Failed to bind rendering API. Error: {0}", Egl.GetError());
+                Debug.Print("[EGL] Failed to bind rendering API. Error: {0}", Egl.eglGetError());
             }
 
             bool offscreen = (flags & GraphicsContextFlags.Offscreen) != 0;
@@ -112,9 +113,9 @@ namespace OpenTK.Platform.Egl
                 }
             }
 
-            int[] attribList = { Egl.CONTEXT_CLIENT_VERSION, major, Egl.NONE };
+            int[] attribList = { EglValues.CONTEXT_CLIENT_VERSION, major, EglValues.NONE };
             var shareContext = shared?.HandleAsEGLContext ?? IntPtr.Zero;
-            HandleAsEGLContext = Egl.CreateContext(window.Display, config, shareContext, attribList);
+            HandleAsEGLContext = Egl.eglCreateContext(window.Display, config, shareContext, attribList);
 
             GraphicsContextFlags = flags;
         }
@@ -136,9 +137,9 @@ namespace OpenTK.Platform.Egl
 
         public override void SwapBuffers()
         {
-            if (!Egl.SwapBuffers(WindowInfo.Display, WindowInfo.Surface))
+            if (!Egl.eglSwapBuffers(WindowInfo.Display, WindowInfo.Surface))
             {
-                throw new GraphicsContextException(string.Format("Failed to swap buffers for context {0} current. Error: {1}", Handle, Egl.GetError()));
+                throw new GraphicsContextException(string.Format("Failed to swap buffers for context {0} current. Error: {1}", Handle, Egl.eglGetError()));
             }
         }
 
@@ -161,20 +162,20 @@ namespace OpenTK.Platform.Egl
                 }
 #endif
 
-                if (!Egl.MakeCurrent(WindowInfo.Display, WindowInfo.Surface, WindowInfo.Surface, HandleAsEGLContext))
+                if (!Egl.eglMakeCurrent(WindowInfo.Display, WindowInfo.Surface, WindowInfo.Surface, HandleAsEGLContext))
                 {
-                    throw new GraphicsContextException(string.Format("Failed to make context {0} current. Error: {1}", Handle, Egl.GetError()));
+                    throw new GraphicsContextException(string.Format("Failed to make context {0} current. Error: {1}", Handle, Egl.eglGetError()));
                 }
             }
             else
             {
-                Egl.MakeCurrent(WindowInfo.Display, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+                Egl.eglMakeCurrent(WindowInfo.Display, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             }
         }
 
         public override bool IsCurrent
         {
-            get { return Egl.GetCurrentContext() == HandleAsEGLContext; }
+            get { return Egl.eglGetCurrentContext() == HandleAsEGLContext; }
         }
 
         public override int SwapInterval
@@ -193,14 +194,14 @@ namespace OpenTK.Platform.Egl
                     value = 1;
                 }
 
-                if (Egl.SwapInterval(WindowInfo.Display, value))
+                if (Egl.eglSwapInterval(WindowInfo.Display, value))
                 {
                     swap_interval = value;
                 }
                 else
                 {
                     Debug.Print("[Warning] Egl.SwapInterval({0}, {1}) failed. Error: {2}",
-                        WindowInfo.Display, value, Egl.GetError());
+                        WindowInfo.Display, value, Egl.eglGetError());
                 }
             }
         }
@@ -212,9 +213,9 @@ namespace OpenTK.Platform.Egl
             // So without this calling this function, the surface won't match the size of the window after it
             // was resized.
             // https://bugs.chromium.org/p/angleproject/issues/detail?id=1438
-            if (!Egl.WaitClient())
+            if (!Egl.eglWaitClient())
             {
-                Debug.Print("[Warning] Egl.WaitClient() failed. Error: {0}", Egl.GetError());
+                Debug.Print("[Warning] Egl.WaitClient() failed. Error: {0}", Egl.eglGetError());
             }
         }
 
@@ -227,7 +228,7 @@ namespace OpenTK.Platform.Egl
             // function pointer with eglGetProcAddress
             if (address == IntPtr.Zero)
             {
-                address = Egl.GetProcAddress(function);
+                address = Egl.eglGetProcAddress(function);
             }
 
             return address;
@@ -245,9 +246,9 @@ namespace OpenTK.Platform.Egl
                 {
                     if (IsCurrent)
                     {
-                        Egl.MakeCurrent(WindowInfo.Display, WindowInfo.Surface, WindowInfo.Surface, IntPtr.Zero);
+                        Egl.eglMakeCurrent(WindowInfo.Display, WindowInfo.Surface, WindowInfo.Surface, IntPtr.Zero);
                     }
-                    Egl.DestroyContext(WindowInfo.Display, HandleAsEGLContext);
+                    Egl.eglDestroyContext(WindowInfo.Display, HandleAsEGLContext);
                 }
                 IsDisposed = true;
             }

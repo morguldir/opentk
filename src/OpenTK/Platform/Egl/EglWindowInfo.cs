@@ -32,6 +32,8 @@ namespace OpenTK.Platform.Egl
     // Holds information about an EGL window.
     internal class EglWindowInfo : IWindowInfo
     {
+        IEgl Egl = EglWrapper.CreateLibraryInterface();
+
         private IntPtr surface;
         private bool disposed;
 
@@ -47,15 +49,15 @@ namespace OpenTK.Platform.Egl
 
             if (display == IntPtr.Zero)
             {
-                display = Egl.GetDisplay(IntPtr.Zero);
+                display = Egl.eglGetDisplay(IntPtr.Zero);
             }
 
             Display = display;
 
             int dummyMajor, dummyMinor;
-            if (!Egl.Initialize(Display, out dummyMajor, out dummyMinor))
+            if (!Egl.eglInitialize(Display, out dummyMajor, out dummyMinor))
             {
-                throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.GetError()));
+                throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.eglGetError()));
             }
         }
 
@@ -67,11 +69,11 @@ namespace OpenTK.Platform.Egl
 
         public void CreateWindowSurface(IntPtr config)
         {
-            Surface = Egl.CreateWindowSurface(Display, config, Handle, IntPtr.Zero);
+            Surface = Egl.eglCreateWindowSurface(Display, config, Handle, IntPtr.Zero);
             if (Surface == IntPtr.Zero)
             {
                 throw new GraphicsContextException(String.Format(
-                    "[EGL] Failed to create window surface, error {0}.", Egl.GetError()));
+                    "[EGL] Failed to create window surface, error {0}.", Egl.eglGetError()));
             }
         }
 
@@ -82,12 +84,12 @@ namespace OpenTK.Platform.Egl
 
         public void CreatePbufferSurface(IntPtr config)
         {
-            int[] attribs = new int[]{Egl.NONE};
-            Surface = Egl.CreatePbufferSurface(Display, config, attribs);
+            int[] attribs = new int[]{EglValues.NONE};
+            Surface = Egl.eglCreatePbufferSurface(Display, config, attribs);
             if (Surface == IntPtr.Zero)
             {
                 throw new GraphicsContextException(String.Format(
-                    "[EGL] Failed to create pbuffer surface, error {0}.", Egl.GetError()));
+                    "[EGL] Failed to create pbuffer surface, error {0}.", Egl.eglGetError()));
             }
         }
 
@@ -104,17 +106,17 @@ namespace OpenTK.Platform.Egl
         {
             int[] attribs = new int[]
             {
-                Egl.WIDTH, width,
-                Egl.HEIGHT, height,
-                Egl.TEXTURE_TARGET, Egl.TEXTURE_2D,
-                Egl.TEXTURE_FORMAT, Egl.TEXTURE_RGBA,
-                Egl.NONE
+                EglValues.WIDTH, width,
+                EglValues.HEIGHT, height,
+                EglValues.TEXTURE_TARGET, EglValues.TEXTURE_2D,
+                EglValues.TEXTURE_FORMAT, EglValues.TEXTURE_RGBA,
+                EglValues.NONE
             };
-            bufferSurface = Egl.CreatePbufferSurface(Display, config, attribs);
+            bufferSurface = Egl.eglCreatePbufferSurface(Display, config, attribs);
             if (bufferSurface == IntPtr.Zero)
             {
                 throw new GraphicsContextException(String.Format(
-                    "[EGL] Failed to create pbuffer surface, error {0}.", Egl.GetError()));
+                    "[EGL] Failed to create pbuffer surface, error {0}.", Egl.eglGetError()));
             }
         }
 
@@ -130,11 +132,11 @@ namespace OpenTK.Platform.Egl
                 return;
             }
 
-            if (Egl.GetCurrentSurface(Egl.DRAW) == Surface)
+            if (Egl.eglGetCurrentSurface(EglValues.DRAW) == Surface)
             {
-                Egl.MakeCurrent(Display, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+                Egl.eglMakeCurrent(Display, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             }
-            if (Egl.DestroySurface(Display, bufferSurface))
+            if (Egl.eglDestroySurface(Display, bufferSurface))
             {
                 bufferSurface = IntPtr.Zero;
                 return;
@@ -148,7 +150,7 @@ namespace OpenTK.Platform.Egl
         {
             if (Display != IntPtr.Zero)
             {
-                if (!Egl.Terminate(Display))
+                if (!Egl.eglTerminate(Display))
                 {
                     Debug.Print("[Warning] Failed to terminate display {0}.", Display);
                 }

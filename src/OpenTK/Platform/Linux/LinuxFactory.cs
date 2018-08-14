@@ -34,11 +34,13 @@ using OpenTK.Platform.Egl;
 
 namespace OpenTK.Platform.Linux
 {
-    using Egl = OpenTK.Platform.Egl.Egl;
+    using EglValues = OpenTK.Platform.Egl.EglValues;
 
     // Linux KMS platform
     internal class LinuxFactory : PlatformFactoryBase
     {
+        static IEgl Egl = EglWrapper.CreateLibraryInterface();
+
         private int _fd;
         private IntPtr gbm_device;
         private IntPtr egl_display;
@@ -138,7 +140,7 @@ namespace OpenTK.Platform.Linux
             }
             Debug.Print("[KMS] GBM {0:x} created successfully; ", gbm_device);
 
-            egl_display = Egl.GetDisplay(gbm_device);
+            egl_display = Egl.eglGetDisplay(gbm_device);
             if (egl_display == IntPtr.Zero)
             {
                 throw new NotSupportedException("[KMS] Failed to create EGL display");
@@ -146,9 +148,9 @@ namespace OpenTK.Platform.Linux
             Debug.Print("[KMS] EGL display {0:x} created successfully", egl_display);
 
             int major, minor;
-            if (!Egl.Initialize(egl_display, out major, out minor))
+            if (!Egl.eglInitialize(egl_display, out major, out minor))
             {
-                ErrorCode error = Egl.GetError();
+                ErrorCode error = Egl.eglGetError();
                 throw new NotSupportedException("[KMS] Failed to initialize EGL display. Error code: " + error);
             }
             Debug.Print("[KMS] EGL {0}.{1} initialized successfully on display {2:x}", major, minor, egl_display);
@@ -161,7 +163,7 @@ namespace OpenTK.Platform.Linux
             if (egl_display != IntPtr.Zero)
             {
                 Debug.Print("[KMS] Terminating EGL.");
-                Egl.Terminate(egl_display);
+                Egl.eglTerminate(egl_display);
                 egl_display = IntPtr.Zero;
             }
             if (gbm_device != IntPtr.Zero)
@@ -198,7 +200,7 @@ namespace OpenTK.Platform.Linux
         {
             return (GraphicsContext.GetCurrentContextDelegate)delegate
             {
-                return new ContextHandle(Egl.GetCurrentContext());
+                return new ContextHandle(Egl.eglGetCurrentContext());
             };
         }
 

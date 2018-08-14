@@ -32,6 +32,8 @@ namespace OpenTK.Platform.Egl
     // EGL factory for the Windows platform.
     internal class EglWinPlatformFactory : WinFactory
     {
+        IEgl Egl = EglWrapper.CreateLibraryInterface();
+
         public override IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
             WinWindowInfo win_win = (WinWindowInfo)window;
@@ -52,16 +54,16 @@ namespace OpenTK.Platform.Egl
         {
             return (GraphicsContext.GetCurrentContextDelegate)delegate
             {
-                return new ContextHandle(Egl.GetCurrentContext());
+                return new ContextHandle(Egl.eglGetCurrentContext());
             };
         }
 
         private IntPtr GetDisplay(IntPtr dc)
         {
-            IntPtr display = Egl.GetDisplay(dc);
+            IntPtr display = Egl.eglGetDisplay(dc);
             if (display == IntPtr.Zero)
             {
-                display = Egl.GetDisplay(IntPtr.Zero);
+                display = Egl.eglGetDisplay(IntPtr.Zero);
             }
 
             return display;

@@ -95,7 +95,7 @@ namespace OpenTK.Platform
                 Embedded = new iPhoneOS.iPhoneFactory();
             }
 #else
-            else if (Egl.Egl.IsSupported)
+            else if (Egl.EglWrapper.IsSupported)
             {
                 if (Configuration.RunningOnLinux)
                 {

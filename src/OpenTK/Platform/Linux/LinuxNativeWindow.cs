@@ -34,10 +34,11 @@ using OpenTK.Platform.Egl;
 
 namespace OpenTK.Platform.Linux
 {
-    using Egl = OpenTK.Platform.Egl.Egl;
+    using EglValues = OpenTK.Platform.Egl.EglValues;
 
     internal class LinuxNativeWindow : NativeWindowBase
     {
+        static IEgl Egl = EglWrapper.CreateLibraryInterface();
         private LinuxWindowInfo window;
         private string title;
         private Icon icon;
@@ -199,15 +200,15 @@ namespace OpenTK.Platform.Linux
             // the corresponding surface format. If that fails
             // fall back to a manual algorithm.
             int format;
-            Egl.GetConfigAttrib(display, mode.Index.Value,
-                Egl.NATIVE_VISUAL_ID, out format);
+            Egl.eglGetConfigAttrib(display, mode.Index.Value,
+                EglValues.NATIVE_VISUAL_ID, out format);
             if ((SurfaceFormat)format != 0)
             {
                 return (SurfaceFormat)format;
             }
 
             Debug.Print("[KMS] Failed to retrieve EGL visual from GBM surface. Error: {0}",
-                Egl.GetError());
+                Egl.eglGetError());
             Debug.Print("[KMS] Falling back to hardcoded formats.");
 
             int r = mode.ColorFormat.Red;

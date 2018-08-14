@@ -53,6 +53,8 @@ namespace OpenTK.Platform.Egl
 
     internal class AngleWindowInfo : IAngleWindowInfoInternal
     {
+        IEgl Egl = EglWrapper.CreateLibraryInterface();
+
         private bool _disposed;
 
         public AngleWindowInfo(IWindowInfo platform_window)
@@ -146,7 +148,7 @@ namespace OpenTK.Platform.Egl
 
         public void MakeCurrent(EGLSurface surface)
         {
-            Egl.MakeCurrent(Display, surface, surface, EglContext.HandleAsEGLContext);
+            Egl.eglMakeCurrent(Display, surface, surface, EglContext.HandleAsEGLContext);
         }
 
         public IntPtr QuerySurfacePointer(IntPtr surface)
@@ -154,7 +156,7 @@ namespace OpenTK.Platform.Egl
             if (UsesDirect3DBackend())
             {
                 return QuerySurfacePointer(surface, 
-                    Egl.EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE);
+                    EglValues.EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE);
             }
             return IntPtr.Zero;
         }
@@ -162,7 +164,7 @@ namespace OpenTK.Platform.Egl
         private IntPtr QuerySurfacePointer(IntPtr surface, int attrib)
         {
             IntPtr surface_pointer;
-            if (Egl.QuerySurfacePointerANGLE(
+            if (Egl.eglQuerySurfacePointerANGLE(
                 Display, surface, attrib, out surface_pointer))
             {
                 return surface_pointer;

@@ -177,6 +177,9 @@
     <Compile Include="Platform\Egl\EglMacPlatformFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Platform\Egl\EglValues.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Platform\MacOS\MacOSFactory.cs">
       <SubType>Code</SubType>
     </Compile>
