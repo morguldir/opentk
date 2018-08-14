@@ -32,7 +32,11 @@ namespace OpenTK.Platform.Linux
 {
     internal class Terminal
     {
-        private const string lib = "libc";
+        #if NETSTANDARD
+            private const string lib = "libc.so.6";
+        #else
+            private const string lib = "libc";
+        #endif
 
         [DllImport(lib, EntryPoint = "isatty", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I4)]
