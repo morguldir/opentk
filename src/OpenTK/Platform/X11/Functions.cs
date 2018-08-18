@@ -42,7 +42,7 @@ namespace OpenTK.Platform.X11
     {
         public static readonly object Lock = API.Lock;
 
-        [DllImport("libX11", EntryPoint = "XOpenDisplay")]
+        [DllImport("libX11.so.6", EntryPoint = "XOpenDisplay")]
         private extern static IntPtr sys_XOpenDisplay(IntPtr display);
         public static IntPtr XOpenDisplay(IntPtr display)
         {

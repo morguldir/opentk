@@ -32,12 +32,8 @@ namespace OpenTK.Platform.Linux
 {
     internal class Udev
     {
-        #if NETSTANDARD
-            private const string lib = "libudev.so.1";
-        #else
-            private const string lib = "libudev";
-        #endif
-
+        private const string lib = "libudev.so.1";
+        
         [DllImport(lib, EntryPoint = "udev_new", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr New();
 

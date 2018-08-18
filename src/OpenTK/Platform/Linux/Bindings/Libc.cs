@@ -35,12 +35,8 @@ namespace OpenTK.Platform.Linux
 {
     internal partial class Libc
     {
-        #if NETSTANDARD
-            private const string lib = "libc.so.6";
-        #else
-            private const string lib = "libc";
-        #endif
-
+        private const string lib = "libc.so.6";
+        
         [DllImport(lib)]
         public static extern int dup(int file);
 

@@ -48,12 +48,8 @@ namespace OpenTK.Platform.Linux
 
     internal class Drm
     {
-        #if NETSTANDARD
-            private const string lib = "libdrm.so.2";
-        #else
-            private const string lib = "libdrm";
-        #endif
-
+        private const string lib = "libdrm.so.2";
+        
         [DllImport(lib, EntryPoint = "drmHandleEvent", CallingConvention = CallingConvention.Cdecl)]
         public static extern int HandleEvent(int fd, ref EventContext evctx);
 

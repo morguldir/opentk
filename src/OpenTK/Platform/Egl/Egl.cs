@@ -198,18 +198,14 @@ namespace OpenTK.Platform.Egl
     {
         private static string GetLibraryName()
         {
-            #if NETSTANDARD
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    return "libEGL.dll";
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    return "libEGL.dylib";
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    return "libEGL.so.1";
-                else
-                    return "libEGL.dll";
-            #else
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return "libEGL.dll";
-            #endif
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return "libEGL.dylib";
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return "libEGL.so.1";
+            else
+                return "libEGL.dll";
         }
         private static string LibraryName = GetLibraryName();
         public static IEgl CreateLibraryInterface() => new NativeLibraryBuilder(ImplementationOptions.UseLazyBinding).ActivateInterface<IEgl>(LibraryName);

@@ -39,11 +39,8 @@ namespace OpenTK.Platform.Linux
 
     internal class Gbm
     {
-        #if NETSTANDARD
-            private const string lib = "libgbm.so.1";
-        #else
-            private const string lib = "gbm";
-        #endif
+        private const string lib = "libgbm.so.1";
+
         [DllImport(lib, EntryPoint = "gbm_bo_create", CallingConvention = CallingConvention.Cdecl)]
         public static extern BufferObject CreateBuffer(Device gbm, int width, int height, SurfaceFormat format, SurfaceFlags flags);
 

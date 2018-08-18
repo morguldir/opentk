@@ -15,10 +15,10 @@ namespace OpenTK
 {
     internal class X11GLControl : IGLControl
     {
-        [DllImport("libX11")]
+        [DllImport("libX11.so.6")]
         private static extern IntPtr XCreateColormap(IntPtr display, IntPtr window, IntPtr visual, int alloc);
 
-        [DllImport("libX11", EntryPoint = "XGetVisualInfo")]
+        [DllImport("libX11.so.6", EntryPoint = "XGetVisualInfo")]
         private static extern IntPtr XGetVisualInfoInternal(IntPtr display, IntPtr vinfo_mask, ref XVisualInfo template, out int nitems);
 
         private static IntPtr XGetVisualInfo(IntPtr display, int vinfo_mask, ref XVisualInfo template, out int nitems)
@@ -26,7 +26,7 @@ namespace OpenTK
             return XGetVisualInfoInternal(display, (IntPtr)vinfo_mask, ref template, out nitems);
         }
 
-        [DllImport("libX11")]
+        [DllImport("libX11.so.6")]
         private extern static int XPending(IntPtr diplay);
 
         [StructLayout(LayoutKind.Sequential)]
