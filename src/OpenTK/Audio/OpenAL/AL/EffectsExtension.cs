@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using AdvancedDLSupport;
 
 
 namespace OpenTK.Audio.OpenAL
@@ -17,6 +18,8 @@ namespace OpenTK.Audio.OpenAL
     /// </summary>
     public partial class EffectsExtension
     {
+        private static IAL AL = NativeLibraryBuilder.Default.ActivateInterface<IAL>(ALWrapper.library);
+
         /// <summary>(Helper) Selects the Effect type used by this Effect handle.</summary>
         /// <param name="eid">Effect id returned from a successful call to GenEffects.</param>
         /// <param name="type">Effect type.</param>
@@ -41,7 +44,7 @@ namespace OpenTK.Audio.OpenAL
         [CLSCompliant(false)]
         public void BindFilterToSource(uint source, uint filter)
         {
-            AL.Source(source, ALSourcei.EfxDirectFilter, (int)filter);
+            AL.alSourcei(source, ALSourcei.EfxDirectFilter, (int)filter);
         }
 
         /// <summary>(Helper) reroutes the output of a Source through a Filter.</summary>
@@ -50,7 +53,7 @@ namespace OpenTK.Audio.OpenAL
 
         public void BindFilterToSource(int source, int filter)
         {
-            AL.Source((uint)source, ALSourcei.EfxDirectFilter, (int)filter);
+            AL.alSourcei((uint)source, ALSourcei.EfxDirectFilter, (int)filter);
         }
 
         /// <summary>(Helper) Attaches an Effect to an Auxiliary Effect Slot.</summary>
@@ -79,7 +82,7 @@ namespace OpenTK.Audio.OpenAL
         [CLSCompliant(false)]
         public void BindSourceToAuxiliarySlot(uint source, uint slot, int slotnumber, uint filter)
         {
-            AL.Source(source, ALSource3i.EfxAuxiliarySendFilter, (int)slot, (int)slotnumber, (int)filter);
+            AL.alSource3i(source, ALSource3i.EfxAuxiliarySendFilter, (int)slot, (int)slotnumber, (int)filter);
         }
 
         /// <summary>(Helper) Reroutes a Source's output into an Auxiliary Effect Slot.</summary>
@@ -90,7 +93,7 @@ namespace OpenTK.Audio.OpenAL
 
         public void BindSourceToAuxiliarySlot(int source, int slot, int slotnumber, int filter)
         {
-            AL.Source((uint)source, ALSource3i.EfxAuxiliarySendFilter, (int)slot, (int)slotnumber, (int)filter);
+            AL.alSource3i((uint)source, ALSource3i.EfxAuxiliarySendFilter, (int)slot, (int)slotnumber, (int)filter);
         }
 
         //[CLSCompliant(false)]
@@ -1121,15 +1124,15 @@ namespace OpenTK.Audio.OpenAL
 
             try
             {
-                Imported_alGenEffects = (Delegate_alGenEffects)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGenEffects"), typeof(Delegate_alGenEffects));
-                Imported_alDeleteEffects = (Delegate_alDeleteEffects)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alDeleteEffects"), typeof(Delegate_alDeleteEffects));
-                Imported_alIsEffect = (Delegate_alIsEffect)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alIsEffect"), typeof(Delegate_alIsEffect));
-                Imported_alEffecti = (Delegate_alEffecti)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alEffecti"), typeof(Delegate_alEffecti));
-                Imported_alEffectf = (Delegate_alEffectf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alEffectf"), typeof(Delegate_alEffectf));
-                Imported_alEffectfv = (Delegate_alEffectfv)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alEffectfv"), typeof(Delegate_alEffectfv));
-                Imported_alGetEffecti = (Delegate_alGetEffecti)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetEffecti"), typeof(Delegate_alGetEffecti));
-                Imported_alGetEffectf = (Delegate_alGetEffectf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetEffectf"), typeof(Delegate_alGetEffectf));
-                Imported_alGetEffectfv = (Delegate_alGetEffectfv)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetEffectfv"), typeof(Delegate_alGetEffectfv));
+                Imported_alGenEffects = (Delegate_alGenEffects)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenEffects"), typeof(Delegate_alGenEffects));
+                Imported_alDeleteEffects = (Delegate_alDeleteEffects)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteEffects"), typeof(Delegate_alDeleteEffects));
+                Imported_alIsEffect = (Delegate_alIsEffect)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alIsEffect"), typeof(Delegate_alIsEffect));
+                Imported_alEffecti = (Delegate_alEffecti)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alEffecti"), typeof(Delegate_alEffecti));
+                Imported_alEffectf = (Delegate_alEffectf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alEffectf"), typeof(Delegate_alEffectf));
+                Imported_alEffectfv = (Delegate_alEffectfv)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alEffectfv"), typeof(Delegate_alEffectfv));
+                Imported_alGetEffecti = (Delegate_alGetEffecti)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetEffecti"), typeof(Delegate_alGetEffecti));
+                Imported_alGetEffectf = (Delegate_alGetEffectf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetEffectf"), typeof(Delegate_alGetEffectf));
+                Imported_alGetEffectfv = (Delegate_alGetEffectfv)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetEffectfv"), typeof(Delegate_alGetEffectfv));
             }
             catch (Exception e)
             {
@@ -1140,13 +1143,13 @@ namespace OpenTK.Audio.OpenAL
 
             try
             {
-                Imported_alGenFilters = (Delegate_alGenFilters)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGenFilters"), typeof(Delegate_alGenFilters));
-                Imported_alDeleteFilters = (Delegate_alDeleteFilters)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alDeleteFilters"), typeof(Delegate_alDeleteFilters));
-                Imported_alIsFilter = (Delegate_alIsFilter)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alIsFilter"), typeof(Delegate_alIsFilter));
-                Imported_alFilteri = (Delegate_alFilteri)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alFilteri"), typeof(Delegate_alFilteri));
-                Imported_alFilterf = (Delegate_alFilterf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alFilterf"), typeof(Delegate_alFilterf));
-                Imported_alGetFilteri = (Delegate_alGetFilteri)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetFilteri"), typeof(Delegate_alGetFilteri));
-                Imported_alGetFilterf = (Delegate_alGetFilterf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetFilterf"), typeof(Delegate_alGetFilterf));
+                Imported_alGenFilters = (Delegate_alGenFilters)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenFilters"), typeof(Delegate_alGenFilters));
+                Imported_alDeleteFilters = (Delegate_alDeleteFilters)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteFilters"), typeof(Delegate_alDeleteFilters));
+                Imported_alIsFilter = (Delegate_alIsFilter)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alIsFilter"), typeof(Delegate_alIsFilter));
+                Imported_alFilteri = (Delegate_alFilteri)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alFilteri"), typeof(Delegate_alFilteri));
+                Imported_alFilterf = (Delegate_alFilterf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alFilterf"), typeof(Delegate_alFilterf));
+                Imported_alGetFilteri = (Delegate_alGetFilteri)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetFilteri"), typeof(Delegate_alGetFilteri));
+                Imported_alGetFilterf = (Delegate_alGetFilterf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetFilterf"), typeof(Delegate_alGetFilterf));
             }
             catch (Exception e)
             {
@@ -1157,13 +1160,13 @@ namespace OpenTK.Audio.OpenAL
 
             try
             {
-                Imported_alGenAuxiliaryEffectSlots = (Delegate_alGenAuxiliaryEffectSlots)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGenAuxiliaryEffectSlots"), typeof(Delegate_alGenAuxiliaryEffectSlots));
-                Imported_alDeleteAuxiliaryEffectSlots = (Delegate_alDeleteAuxiliaryEffectSlots)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alDeleteAuxiliaryEffectSlots"), typeof(Delegate_alDeleteAuxiliaryEffectSlots));
-                Imported_alIsAuxiliaryEffectSlot = (Delegate_alIsAuxiliaryEffectSlot)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alIsAuxiliaryEffectSlot"), typeof(Delegate_alIsAuxiliaryEffectSlot));
-                Imported_alAuxiliaryEffectSloti = (Delegate_alAuxiliaryEffectSloti)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alAuxiliaryEffectSloti"), typeof(Delegate_alAuxiliaryEffectSloti));
-                Imported_alAuxiliaryEffectSlotf = (Delegate_alAuxiliaryEffectSlotf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alAuxiliaryEffectSlotf"), typeof(Delegate_alAuxiliaryEffectSlotf));
-                Imported_alGetAuxiliaryEffectSloti = (Delegate_alGetAuxiliaryEffectSloti)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetAuxiliaryEffectSloti"), typeof(Delegate_alGetAuxiliaryEffectSloti));
-                Imported_alGetAuxiliaryEffectSlotf = (Delegate_alGetAuxiliaryEffectSlotf)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("alGetAuxiliaryEffectSlotf"), typeof(Delegate_alGetAuxiliaryEffectSlotf));
+                Imported_alGenAuxiliaryEffectSlots = (Delegate_alGenAuxiliaryEffectSlots)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGenAuxiliaryEffectSlots"), typeof(Delegate_alGenAuxiliaryEffectSlots));
+                Imported_alDeleteAuxiliaryEffectSlots = (Delegate_alDeleteAuxiliaryEffectSlots)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alDeleteAuxiliaryEffectSlots"), typeof(Delegate_alDeleteAuxiliaryEffectSlots));
+                Imported_alIsAuxiliaryEffectSlot = (Delegate_alIsAuxiliaryEffectSlot)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alIsAuxiliaryEffectSlot"), typeof(Delegate_alIsAuxiliaryEffectSlot));
+                Imported_alAuxiliaryEffectSloti = (Delegate_alAuxiliaryEffectSloti)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alAuxiliaryEffectSloti"), typeof(Delegate_alAuxiliaryEffectSloti));
+                Imported_alAuxiliaryEffectSlotf = (Delegate_alAuxiliaryEffectSlotf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alAuxiliaryEffectSlotf"), typeof(Delegate_alAuxiliaryEffectSlotf));
+                Imported_alGetAuxiliaryEffectSloti = (Delegate_alGetAuxiliaryEffectSloti)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetAuxiliaryEffectSloti"), typeof(Delegate_alGetAuxiliaryEffectSloti));
+                Imported_alGetAuxiliaryEffectSlotf = (Delegate_alGetAuxiliaryEffectSlotf)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("alGetAuxiliaryEffectSlotf"), typeof(Delegate_alGetAuxiliaryEffectSlotf));
             }
             catch (Exception e)
             {

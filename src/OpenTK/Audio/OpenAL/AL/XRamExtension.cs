@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using AdvancedDLSupport;
 
 namespace OpenTK.Audio.OpenAL
 {
@@ -19,6 +20,8 @@ namespace OpenTK.Audio.OpenAL
     [CLSCompliant(true)]
     public sealed class XRamExtension
     {
+        private static IAL AL = NativeLibraryBuilder.Default.ActivateInterface<IAL>(ALWrapper.library);
+
         /// <summary>Returns True if the X-Ram Extension has been found and could be initialized.</summary>
         public bool IsInitialized { get; } = false;
 
@@ -44,16 +47,16 @@ namespace OpenTK.Audio.OpenAL
         public XRamExtension()
         { // Query if Extension supported and retrieve Tokens/Pointers if it is.
             IsInitialized = false;
-            if (AL.IsExtensionPresent("EAX-RAM") == false)
+            if (AL.alIsExtensionPresent("EAX-RAM") == false)
             {
                 return;
             }
 
-            AL_EAX_RAM_SIZE = AL.GetEnumValue("AL_EAX_RAM_SIZE");
-            AL_EAX_RAM_FREE = AL.GetEnumValue("AL_EAX_RAM_FREE");
-            AL_STORAGE_AUTOMATIC = AL.GetEnumValue("AL_STORAGE_AUTOMATIC");
-            AL_STORAGE_HARDWARE = AL.GetEnumValue("AL_STORAGE_HARDWARE");
-            AL_STORAGE_ACCESSIBLE = AL.GetEnumValue("AL_STORAGE_ACCESSIBLE");
+            AL_EAX_RAM_SIZE = AL.alGetEnumValue("AL_EAX_RAM_SIZE");
+            AL_EAX_RAM_FREE = AL.alGetEnumValue("AL_EAX_RAM_FREE");
+            AL_STORAGE_AUTOMATIC = AL.alGetEnumValue("AL_STORAGE_AUTOMATIC");
+            AL_STORAGE_HARDWARE = AL.alGetEnumValue("AL_STORAGE_HARDWARE");
+            AL_STORAGE_ACCESSIBLE = AL.alGetEnumValue("AL_STORAGE_ACCESSIBLE");
 
             // Console.WriteLine("RamSize: {0} RamFree: {1} StorageAuto: {2} StorageHW: {3} StorageAccess: {4}",AL_EAX_RAM_SIZE,AL_EAX_RAM_FREE,AL_STORAGE_AUTOMATIC,AL_STORAGE_HARDWARE,AL_STORAGE_ACCESSIBLE);
 
@@ -71,8 +74,8 @@ namespace OpenTK.Audio.OpenAL
 
             try
             {
-                Imported_GetBufferMode = (Delegate_GetBufferMode)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("EAXGetBufferMode"), typeof(Delegate_GetBufferMode));
-                Imported_SetBufferMode = (Delegate_SetBufferMode)Marshal.GetDelegateForFunctionPointer(AL.GetProcAddress("EAXSetBufferMode"), typeof(Delegate_SetBufferMode));
+                Imported_GetBufferMode = (Delegate_GetBufferMode)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("EAXGetBufferMode"), typeof(Delegate_GetBufferMode));
+                Imported_SetBufferMode = (Delegate_SetBufferMode)Marshal.GetDelegateForFunctionPointer(AL.alGetProcAddress("EAXSetBufferMode"), typeof(Delegate_SetBufferMode));
             }
             catch (Exception e)
             {
@@ -88,7 +91,7 @@ namespace OpenTK.Audio.OpenAL
         {
             get
             {
-                return AL.Get((ALGetInteger)AL_EAX_RAM_SIZE);
+                return AL.alGetInteger((ALGetInteger)AL_EAX_RAM_SIZE);
             }
         }
 
@@ -97,7 +100,7 @@ namespace OpenTK.Audio.OpenAL
         {
             get
             {
-                return AL.Get((ALGetInteger)AL_EAX_RAM_FREE);
+                return AL.alGetInteger((ALGetInteger)AL_EAX_RAM_FREE);
             }
         }
 
