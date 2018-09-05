@@ -3,7 +3,7 @@ using System;
 namespace OpenTK.Platform.SDL2
 {
     [Flags]
-    internal enum ContextFlags
+    public enum ContextFlags
     {
         DEBUG = 0x0001,
         FORWARD_COMPATIBLE = 0x0002,

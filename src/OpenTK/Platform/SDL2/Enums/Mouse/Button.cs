@@ -2,7 +2,7 @@ using System;
 
 namespace OpenTK.Platform.SDL2
 {
-    internal enum Button : byte
+    public enum Button : byte
     {
         Left = 1,
         Middle,
@@ -11,7 +11,7 @@ namespace OpenTK.Platform.SDL2
         X2
     }
     [Flags]
-    internal enum ButtonFlags
+    public enum ButtonFlags
     {
         Left = 1 << (Button.Left - 1),
         Middle = 1 << (Button.Middle - 1),

@@ -579,7 +579,7 @@
     <Compile Include="Platform\MacOS\HIDInput.cs" />
     <Compile Include="IntPtrEqualityComparer.cs" />
     <Compile Include="Input\GamePadAxes.cs" />
-    <Compile Include="Platform\SDL2\Sdl2DisplayDeviceDriver.cs" />
+    <!--Compile Include="Platform\SDL2\Sdl2DisplayDeviceDriver.cs" />
     <Compile Include="Platform\SDL2\Sdl2Factory.cs" />
     <Compile Include="Platform\SDL2\Sdl2GraphicsContext.cs" />
     <Compile Include="Platform\SDL2\Sdl2GraphicsMode.cs" />
@@ -589,30 +589,16 @@
     <Compile Include="Platform\SDL2\Sdl2Mouse.cs" />
     <Compile Include="Platform\SDL2\Sdl2NativeWindow.cs" />
     <Compile Include="Platform\SDL2\Sdl2WindowInfo.cs" />
-    <Compile Include="Platform\SDL2\Sdl2.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Mouse.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Video.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Events.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Surface.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2GameController.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Init.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\ISDL2Joystick.cs" />
-    <Compile Include="Platform\SDL2\Interfaces\GL\ISDL2Video.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Mouse.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Video.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Events.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Surface.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2GameController.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Joystick.cs" />
-    <Compile Include="Platform\SDL2\Members\SDL2Init.cs" />
-    <Compile Include="Platform\SDL2\Members\GL\SDL2Video.cs" />
-    <Compile Include="Platform\Egl\EglSdl2PlatformFactory.cs" />
     <Compile Include="Platform\SDL2\Sdl2JoystickDriver.cs" />
-    <Compile Include="Platform\SDL2\Enums\Mouse\Button.cs"/>
-    <Compile Include="Platform\SDL2\Enums\Video\GL\Attribute.cs"/>
-    <Compile Include="Platform\SDL2\Enums\Video\GL\ContextFlags.cs"/>
+    <Compile Include="Platform\SDL2\Sdl2.cs" /-->
+    <Compile Include="Platform\SDL2\Interfaces\*.cs" />
+    <Compile Include="Platform\SDL2\Interfaces\GL\*.cs" />
+    <Compile Include="Platform\SDL2\Members\*.cs" />
+    <Compile Include="Platform\SDL2\Members\GL\*.cs" />
+    <Compile Include="Platform\Egl\EglSdl2PlatformFactory.cs" />
+    <Compile Include="Platform\SDL2\Enums\*\*.cs" />
+    <Compile Include="Platform\SDL2\Enums\Video\GL\*.cs" />
+    <Compile Include="Platform\SDL2\*" />
     <Compile Include="Graphics\ES30\ErrorHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -722,6 +708,7 @@
     <None Include="paket.references" />
     <Compile Include="Platform\MacOS\Cocoa\NSDragOperation.cs" />
     <Compile Include="Platform\MacOS\CoreVideo.cs" />
+    <Compile Include="Loader\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AdvancedDLSupport" Version="2.2.0" />

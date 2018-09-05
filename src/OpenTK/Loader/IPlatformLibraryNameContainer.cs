@@ -3,7 +3,7 @@ namespace OpenTK.Loader
     /// <summary>
     /// Defines a class that holds library names used on various platforms.
     /// </summary>
-    internal class IPlatformLibraryNameContainer
+    public interface IPlatformLibraryNameContainer
     {
         /// <summary>
         /// Gets the library name to use on Windows.
@@ -33,6 +33,6 @@ namespace OpenTK.Loader
         /// <summary>
         /// Gets the library name to use on the current platform.
         /// </summary>
-        string GetLibraryName;
+        string GetLibraryName();
     }
 }
