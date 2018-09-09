@@ -26,6 +26,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using OpenTK.Platform.SDL2;
 
 namespace OpenTK
 {
@@ -36,6 +37,8 @@ namespace OpenTK
     /// </summary>
     public sealed class Configuration
     {
+        private static readonly SDL SDL = Sdl2DisplayDeviceDriver.SDL;
+
         private static bool runningOnUnix, runningOnMacOS, runningOnLinux;
         private volatile static bool initialized;
         private readonly static object InitLock = new object();
@@ -178,10 +181,10 @@ namespace OpenTK
             var version = new Platform.SDL2.Version();
             try
             {
-                version = Platform.SDL2.SDL.Version;
+                version = SDL.Version;
                     if (version.Number >= 2000)
                 {
-                    if (Platform.SDL2.SDL.WasInit(0))
+                    if (SDL.WasInit(0))
                     {
                         supported = true;
                     }
@@ -192,14 +195,14 @@ namespace OpenTK
                             Platform.SDL2.SystemFlags.VIDEO |
                             Platform.SDL2.SystemFlags.TIMER;
 
-                        if (Platform.SDL2.SDL.Init(flags) == 0)
+                        if (SDL.Init(flags) == 0)
                         {
                             supported = true;
                         }
                         else
                         {
                             Debug.Print("SDL2 init failed with error: {0}",
-                                Platform.SDL2.SDL.GetError());
+                                SDL.GetError());
                         }
                     }
                 }

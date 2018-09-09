@@ -29,7 +29,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <returns>Returns 0 on success or a negative error code on failure; 
         /// call <see cref="GetError()"/> for more information. </returns>
         [NativeSymbol("GL_GetAttribute")]
-        int GetAttribute(System.Attribute attr, out int value);
+        int GetAttribute(Attribute attr, out int value);
 
         /// <summary>
         /// Use this function to get the currently active OpenGL context. 
@@ -80,7 +80,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="value">the desired value for the attribute</param>
         /// <returns></returns>
         [NativeSymbol("GL_SetAttribute")]
-        int SetAttribute(System.Attribute attr, int value);
+        int SetAttribute(Attribute attr, int value);
 
         /// <summary>
         /// Use this function to set the swap interval for the current OpenGL context. 

@@ -40,4 +40,3 @@ namespace OpenTK.Platform.SDL2
         }
     }
 }
-

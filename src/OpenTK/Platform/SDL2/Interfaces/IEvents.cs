@@ -12,7 +12,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="filter">the function to call when an event happens.</param>
         /// <param name="userdata">a pointer that is passed to filter.</param>
         void AddEventWatch(EventFilter filter, IntPtr userdata);
- 
+
         /// <summary>
         /// Use this function to add a callback to be triggered when an event is added to the event queue. 
         /// </summary>
@@ -26,7 +26,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="filter">the function originally passed to <see cref="AddEventWatch()"/></param>
         /// <param name="userdata">the pointer originally passed to <see cref="AddEventWatch()"/></param>
         void DelEventWatch(EventFilter filter, IntPtr userdata);
- 
+
         /// <summary>
         /// Use this function to remove an event watch callback added with <see cref="AddEventWatch()"/>. 
         /// </summary>
@@ -45,8 +45,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="max"> maximum value of the event type to be considered; <c>EventType.LastEvent</c> is a safe choice </param>
         /// <returns>Returns the number of events actually stored or a negative error code on failure; 
         /// call <see cref="GetError()"/> for more information. </returns>
-        unsafe int PeepEvents(Event* events, int count, EventAction action, EventType min, EventType max);
-
+        unsafe int PeepEvents(Event * events, int count, EventAction action, EventType min, EventType max);
 
         /// <summary>
         /// Use this function to poll for currently pending events. 
@@ -59,14 +58,13 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// Use this function to pump the event loop, gathering events from the input devices. 
         /// </summary>
         void PumpEvents();
- 
+
         /// <summary>
         /// Use this function to add an event to the event queue. 
         /// </summary>
         /// <returns>Returns 1 on success, 0 if the event was filtered, or a negative error code on failure; 
         /// call <see cref="GetError()"/> for more information. A common reason for error is the event queue being full. </returns>
         int PushEvent(ref Event @event);
- 
-        
+
     }
 }

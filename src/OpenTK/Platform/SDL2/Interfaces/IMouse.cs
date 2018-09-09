@@ -3,27 +3,24 @@ using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
-    using Surface = IntPtr;
-    using Cursor = IntPtr;
-    
     [NativeSymbols(Prefix = "SDL_")]
     internal interface IMouse
     {
         /// <summary>
         /// Use this function to create a color cursor. 
         /// </summary>
-        /// <param name="surface">a <see cref="Surface" /> structure representing the cursor image</param>
+        /// <param name="surface">a <see cref="IntPtr" /> structure representing the cursor image</param>
         /// <param name="hot_x">the x position of the cursor hot spot</param>
         /// <param name="hot_y">the y position of the cursor hot spot</param>
         /// <returns>Returns the new cursor on success or <see cref="IntPtr.Zero" /> on failure; call <see cref="GetError()" /> for more information. </returns>
-        Cursor CreateColorCursor(Surface surface, int hot_x, int hot_y);
- 
+        IntPtr CreateColorCursor(IntPtr surface, int hot_x, int hot_y);
+
         /// <summary>
         /// Use this function to free a cursor created with SDL_CreateColorCursor() 
         /// </summary>
         /// <param name="cursor">the cursor to free</param>
-        void FreeCursor(Cursor cursor);
- 
+        void FreeCursor(IntPtr cursor);
+
         /// <summary>
         /// Use this function to get the default cursor. 
         /// </summary>
@@ -45,7 +42,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="hy">the y coordinate of the mouse cursor position relative to the focus window</param>
         /// <returns>Returns a 32-bit button bitmask of the current button state.</returns>
         ButtonFlags GetMouseState(out int hx, out int hy);
- 
+
         /// <summary>
         /// Use this function to set the active cursor.
         /// </summary>
@@ -53,7 +50,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <remarks>This function sets the currently active cursor to the specified one. 
         /// If the cursor is currently visible, the change will be immediately represented on the display. 
         /// <see cref="SetCursor(IntPtr.Zero)"/> can be used to force cursor redraw, if this is desired for any reason. </remarks>
-        void SetCursor(Cursor cursor);
+        void SetCursor(IntPtr cursor);
 
         /// <summary>
         /// Use this function to set relative mouse mode. 
@@ -69,7 +66,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="toggle"><see cref="true"/>to show the cursor, <see cref="false"/>to hide it</param>
         /// <returns>Returns <see cref="true"/> if the cursor is shown, or <see cref="false"/> if the cursor is hidden, or a negative error code on failure; call <see cref="GetError()"/> for more information. </returns>
         int ShowCursor(bool toggle);
-       
+
         /// <summary>
         /// Use this function to move the mouse to the given position in global screen space. 
         /// </summary>

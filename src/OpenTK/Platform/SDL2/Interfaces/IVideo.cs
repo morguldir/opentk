@@ -204,7 +204,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// </summary>
         /// <param name="window">the window to change</param>
         /// <param name="title">the desired window title in UTF-8 format</param>
-        void SetWindowTitlePrivate(IntPtr window, string title);
+        void SetWindowTitle(IntPtr window, string title);
 
         /// <summary>
         /// Use this function to show a window. 

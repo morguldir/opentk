@@ -6,6 +6,7 @@ using System;
 using System.Reflection;
 using System.Diagnostics;
 using OpenTK.Graphics;
+using OpenTK.Platform.SDL2;
 
 namespace OpenTK.Platform
 {
@@ -24,6 +25,8 @@ namespace OpenTK.Platform
     /// </summary>
     public static class Utilities
     {
+        private static readonly SDL.GL GL = Sdl2GraphicsContext.GL;
+
         private static bool throw_on_error;
         internal static bool ThrowOnX11Error
         {
@@ -176,7 +179,7 @@ namespace OpenTK.Platform
             #if SDL2
             if (Configuration.RunningOnSdl2)
             {
-                return Platform.SDL2.SDL.GL.GetProcAddress;
+                return GL.GetProcAddress;
             }
             #endif
             #if WIN32

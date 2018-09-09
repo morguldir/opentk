@@ -44,7 +44,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="joystick">an open joystick</param>
         /// <returns>Returns the GUID of the given joystick. If called on an invalid index, 
         /// this function returns a zero GUID; call <see cref="GetError()"/> for more information. </returns>
-        JoystickGuid JoystickGetGUID(IntPtr joystick);
+        JoystickGUID JoystickGetGUID(IntPtr joystick);
 
         /// <summary>
         /// Use this function to get the instance ID of an opened joystick. 

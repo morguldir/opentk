@@ -26,13 +26,16 @@
 using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Loader;
+using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2DisplayDeviceDriver : DisplayDeviceBase
     {
-        private readonly SDL SDL = SDL.GetAPI();
-        
+        public static readonly SDL SDL = APILoader.Load<SDL, SDL2LibraryNameController>();
+
+        public static readonly SDL.GL GL = SDL.GL.GetAPI();
+
         public Sdl2DisplayDeviceDriver()
         {
             int displays = SDL.GetNumVideoDisplays();
@@ -100,4 +103,3 @@ namespace OpenTK.Platform.SDL2
         }
     }
 }
-

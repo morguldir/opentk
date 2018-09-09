@@ -10,6 +10,7 @@ namespace OpenTK.Platform.SDL2
         X1,
         X2
     }
+
     [Flags]
     public enum ButtonFlags
     {

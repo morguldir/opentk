@@ -1,6 +1,6 @@
 using System;
-using OpenTK.Platform.SDL2.Interfaces;
 using AdvancedDLSupport;
+using OpenTK.Platform.SDL2.Interfaces;
 
 namespace OpenTK.Platform.SDL2
 {
@@ -18,7 +18,7 @@ namespace OpenTK.Platform.SDL2
         public abstract byte JoystickGetButton(IntPtr joystick, int button);
 
         /// <inheritdoc/>
-        public abstract JoystickGuid JoystickGetGUID(IntPtr joystick);
+        public abstract JoystickGUID JoystickGetGUID(IntPtr joystick);
 
         /// <inheritdoc/>
         public abstract int JoystickInstanceID(IntPtr joystick);

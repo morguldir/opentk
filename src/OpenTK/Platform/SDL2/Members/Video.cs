@@ -4,7 +4,7 @@ using OpenTK.Platform.SDL2.Interfaces;
 
 namespace OpenTK.Platform.SDL2
 {
-    public abstract partial class SDL: NativeLibraryBase, ISDL2
+    public abstract partial class SDL : NativeLibraryBase, ISDL2
     {
         /// <inheritdoc /> 
         public abstract IntPtr CreateWindow(string title, int x, int y, int w, int h, WindowFlags flags);
@@ -82,11 +82,10 @@ namespace OpenTK.Platform.SDL2
         public abstract void SetWindowSize(IntPtr window, int x, int y);
 
         /// <inheritdoc /> 
-        public abstract void SetWindowTitlePrivate(IntPtr window, string title);
+        public abstract void SetWindowTitle(IntPtr window, string title);
 
         /// <inheritdoc /> 
         public abstract void ShowWindow(IntPtr window);
-
 
     }
 }

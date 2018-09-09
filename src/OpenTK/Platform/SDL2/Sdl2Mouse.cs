@@ -31,6 +31,8 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2Mouse : IMouseDriver2
     {
+        private static readonly SDL SDL = Sdl2DisplayDeviceDriver.SDL;
+
         private MouseState state;
 
         public Sdl2Mouse()

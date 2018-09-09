@@ -3,7 +3,7 @@ using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
-    [NativeSymbols(Prefix="SDL_")]
+    [NativeSymbols(Prefix = "SDL_")]
     internal interface IGameController
     {
         /// <summary>
@@ -56,7 +56,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="gamecontroller">A game controller handle previously opened with <c>GameControllerOpen</c>.</param>
         /// <returns>A handle to a joystick, or IntPtr.Zero in case of error. The pointer is owned by the callee. Use <c>SDL.GetError</c> to retrieve error information</returns>
         IntPtr GameControllerGetJoystick(IntPtr gamecontroller);
-
 
         /// <summary>
         /// Use this function to get the implementation dependent name for an opened game controller. 

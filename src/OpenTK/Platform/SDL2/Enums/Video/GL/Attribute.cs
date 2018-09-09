@@ -1,6 +1,6 @@
 namespace OpenTK.Platform.SDL2
 {
-    internal enum Attribute
+    public enum Attribute
     {
         RED_SIZE,
         GREEN_SIZE,

@@ -19,6 +19,5 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <returns>Returns the <see cref="Scancode"/> that corresponds to the given <see cref="Keycode"/>. </returns>
         Scancode GetScancodeFromKey(Keycode key);
 
-
     }
 }

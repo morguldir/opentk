@@ -20,7 +20,7 @@ namespace OpenTK.Platform.SDL2
 
         /// <inheritdoc />
         public abstract int PollEvent(out Event e);
- 
+
         /// <inheritdoc />
         public abstract void PumpEvents();
 
@@ -28,6 +28,6 @@ namespace OpenTK.Platform.SDL2
         public abstract int PushEvent(ref Event @event);
 
         /// <inheritdoc />
-        public abstract unsafe int PeepEvents(Event* e, int count, EventAction action, EventType min, EventType max);
+        public abstract unsafe int PeepEvents(Event * e, int count, EventAction action, EventType min, EventType max);
     }
 }

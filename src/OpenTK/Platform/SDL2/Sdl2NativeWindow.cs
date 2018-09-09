@@ -35,6 +35,10 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2NativeWindow : NativeWindowBase
     {
+        private static readonly SDL SDL = Sdl2DisplayDeviceDriver.SDL;
+
+        private readonly SDL.GL GL = Sdl2GraphicsContext.GL;
+
         private readonly object sync = new object();
 
         private Sdl2WindowInfo window;
@@ -130,7 +134,7 @@ namespace OpenTK.Platform.SDL2
             return Sdl2KeyMap.GetKey(scan);
         }
 
-        private static Key TranslateKey(Keycode key)
+        private Key TranslateKey(Keycode key)
         {
             Scancode scan = SDL.GetScancodeFromKey(key);
             return TranslateKey(scan);
@@ -218,7 +222,7 @@ namespace OpenTK.Platform.SDL2
             return processed ? 0 : 1;
         }
 
-        private static void ProcessMouseButtonEvent(Sdl2NativeWindow window, MouseButtonEvent ev)
+        private void ProcessMouseButtonEvent(Sdl2NativeWindow window, MouseButtonEvent ev)
         {
             bool button_pressed = ev.State == State.Pressed;
 
@@ -897,7 +901,7 @@ namespace OpenTK.Platform.SDL2
                 {
                     // SDL > 2.0.0 supports SDL_GL_GetDrawableSize for
                     // hidpi windows.
-                    SDL.GL.GetDrawableSize(window.Handle, out w, out h);
+                    GL.GetDrawableSize(window.Handle, out w, out h);
                 }
                 else
                 {

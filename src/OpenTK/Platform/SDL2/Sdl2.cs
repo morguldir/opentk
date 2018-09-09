@@ -25,11 +25,11 @@
 
 using System;
 using System.Diagnostics;
-using System.Security;
 using System.Runtime.InteropServices;
+using System.Security;
 using AdvancedDLSupport;
-using OpenTK.Platform.SDL2.Interfaces;
 using OpenTK.Loader;
+using OpenTK.Platform.SDL2.Interfaces;
 
 #pragma warning disable 0169
 
@@ -41,13 +41,11 @@ namespace OpenTK.Platform.SDL2
     public abstract partial class SDL : NativeLibraryBase, ISDL2
     {
         /// <inheritdoc cref="NativeLibraryBase"/> 
-        protected SDL(string path, ImplementationOptions options)
-            : base(path, options)
-        {
-        }
+        protected SDL(string path, ImplementationOptions options) : base(path, options)
+        { }
 
         /// <inheritdoc/>
-        public abstract void free(IntPtr memblock);
+        public abstract void Free(IntPtr memblock);
 
         public readonly static object Sync = new object();
         private Nullable<Version> version;
@@ -89,10 +87,9 @@ namespace OpenTK.Platform.SDL2
         {
             unsafe
             {
-                return new string((sbyte*)GameControllerNameInternal(gamecontroller));
+                return new string((sbyte * ) GameControllerNameInternal(gamecontroller));
             }
         }
-
 
         public string GetError()
         {
@@ -115,22 +112,21 @@ namespace OpenTK.Platform.SDL2
         {
             unsafe
             {
-                return new string((sbyte*)JoystickNameInternal(joystick));
+                return new string((sbyte * ) JoystickNameInternal(joystick));
             }
         }
-
 
         public int PeepEvents(ref Event e, EventAction action, EventType min, EventType max)
         {
             unsafe
             {
-                fixed (Event* pe = &e)
+                fixed(Event * pe = & e)
                 {
                     return PeepEvents(pe, 1, action, min, max);
                 }
             }
         }
-        
+
         public int PeepEvents(Event[] e, int count, EventAction action, EventType min, EventType max)
         {
             if (e == null)
@@ -144,7 +140,7 @@ namespace OpenTK.Platform.SDL2
 
             unsafe
             {
-                fixed (Event *pe = e)
+                fixed(Event * pe = e)
                 {
                     return PeepEvents(pe, count, action, min, max);
                 }
@@ -171,8 +167,7 @@ namespace OpenTK.Platform.SDL2
             return GetWindowWMInfoInternal(window, ref info);
         }
 
-
-        public abstract partial class GL : NativeLibraryBase, ISDL2GL
+        public abstract partial class GL : NativeLibraryBase, IGLVideo
         {
             public IntPtr GetProcAddress(string proc)
             {
@@ -187,13 +182,13 @@ namespace OpenTK.Platform.SDL2
                 }
             }
 
-            public int SetAttribute(System.Attribute attr, ContextFlags value)
+            public int SetAttribute(Attribute attr, ContextFlags value)
             {
-                return SetAttribute(attr, (int)value);
+                return SetAttribute(attr, (int) value);
             }
-            public int SetAttribute(System.Attribute attr, ContextProfileFlags value)
+            public int SetAttribute(Attribute attr, ContextProfileFlags value)
             {
-                return SetAttribute(attr, (int)value);
+                return SetAttribute(attr, (int) value);
             }
             public static GL GetAPI()
             {
@@ -210,4 +205,3 @@ namespace OpenTK.Platform.SDL2
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int EventFilter(IntPtr userdata, IntPtr @event);
 }
-

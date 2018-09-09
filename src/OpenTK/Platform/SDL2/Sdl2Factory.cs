@@ -73,7 +73,7 @@ namespace OpenTK.Platform.SDL2
 
         public override GraphicsContext.GetCurrentContextDelegate CreateGetCurrentGraphicsContext()
         {
-            return (GraphicsContext.GetCurrentContextDelegate)delegate
+            return (GraphicsContext.GetCurrentContextDelegate) delegate
             {
                 return Sdl2GraphicsContext.GetCurrentContext();
             };
@@ -115,7 +115,7 @@ namespace OpenTK.Platform.SDL2
         {
             if (inputDriver == null)
             {
-                lock (inputDriverLock)
+                lock(inputDriverLock)
                 {
                     // Check again inside the lock
                     if (inputDriver == null)
@@ -129,4 +129,3 @@ namespace OpenTK.Platform.SDL2
         }
     }
 }
-
