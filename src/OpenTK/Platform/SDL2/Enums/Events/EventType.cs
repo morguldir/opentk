@@ -1,0 +1,41 @@
+namespace OpenTK.Platform.SDL2
+{
+    public enum EventType
+    {
+        FIRSTEVENT = 0,
+        QUIT = 0x100,
+        WINDOWEVENT = 0x200,
+        SYSWMEVENT,
+        KEYDOWN = 0x300,
+        KEYUP,
+        TEXTEDITING,
+        TEXTINPUT,
+        MOUSEMOTION = 0x400,
+        MOUSEBUTTONDOWN,
+        MOUSEBUTTONUP,
+        MOUSEWHEEL,
+        JOYAXISMOTION = 0x600,
+        JOYBALLMOTION,
+        JOYHATMOTION,
+        JOYBUTTONDOWN,
+        JOYBUTTONUP,
+        JOYDEVICEADDED,
+        JOYDEVICEREMOVED,
+        CONTROLLERAXISMOTION = 0x650,
+        CONTROLLERBUTTONDOWN,
+        CONTROLLERBUTTONUP,
+        CONTROLLERDEVICEADDED,
+        CONTROLLERDEVICEREMOVED,
+        CONTROLLERDEVICEREMAPPED,
+        FINGERDOWN = 0x700,
+        FINGERUP,
+        FINGERMOTION,
+        DOLLARGESTURE = 0x800,
+        DOLLARRECORD,
+        MULTIGESTURE,
+        CLIPBOARDUPDATE = 0x900,
+        DROPFILE = 0x1000,
+        USEREVENT = 0x8000,
+        LASTEVENT = 0xFFFF
+    }
+}
