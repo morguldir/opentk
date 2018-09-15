@@ -35,6 +35,10 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2NativeWindow : NativeWindowBase
     {
+        private static readonly SDL SDL = SDL.GetAPI();
+
+        private static readonly GL GL = GL.GetAPI();
+
         private readonly object sync = new object();
 
         private Sdl2WindowInfo window;
@@ -897,7 +901,7 @@ namespace OpenTK.Platform.SDL2
                 {
                     // SDL > 2.0.0 supports SDL_GL_GetDrawableSize for
                     // hidpi windows.
-                    SDL.GL.GetDrawableSize(window.Handle, out w, out h);
+                    GL.GetDrawableSize(window.Handle, out w, out h);
                 }
                 else
                 {

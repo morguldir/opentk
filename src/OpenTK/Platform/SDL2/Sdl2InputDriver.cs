@@ -33,6 +33,8 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2InputDriver : IInputDriver2
     {
+        private static readonly SDL SDL = SDL.GetAPI();
+
         private readonly static Dictionary<IntPtr, Sdl2InputDriver> DriverHandles =
             new Dictionary<IntPtr, Sdl2InputDriver>();
 

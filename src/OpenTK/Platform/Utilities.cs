@@ -24,6 +24,8 @@ namespace OpenTK.Platform
     /// </summary>
     public static class Utilities
     {
+        private static readonly SDL2.GL GL =  SDL2.GL.GetAPI();
+
         private static bool throw_on_error;
         internal static bool ThrowOnX11Error
         {
@@ -174,9 +176,10 @@ namespace OpenTK.Platform
         internal static GraphicsContext.GetAddressDelegate CreateGetAddress()
         {
             #if SDL2
+            
             if (Configuration.RunningOnSdl2)
             {
-                return Platform.SDL2.SDL.GL.GetProcAddress;
+                return GL.GetProcAddress;
             }
             #endif
             #if WIN32

@@ -165,6 +165,8 @@ namespace OpenTK
         }
 
         #if SDL2
+        private static readonly Platform.SDL2.SDL SDL = Platform.SDL2.SDL.GetAPI();
+
         private static bool DetectSdl2()
         {
             bool supported = false;
@@ -178,10 +180,10 @@ namespace OpenTK
             var version = new Platform.SDL2.Version();
             try
             {
-                version = Platform.SDL2.SDL.Version;
+                version = SDL.Version;
                     if (version.Number >= 2000)
                 {
-                    if (Platform.SDL2.SDL.WasInit(0))
+                    if (SDL.WasInit(0))
                     {
                         supported = true;
                     }
@@ -192,14 +194,14 @@ namespace OpenTK
                             Platform.SDL2.SystemFlags.VIDEO |
                             Platform.SDL2.SystemFlags.TIMER;
 
-                        if (Platform.SDL2.SDL.Init(flags) == 0)
+                        if (SDL.Init(flags) == 0)
                         {
                             supported = true;
                         }
                         else
                         {
                             Debug.Print("SDL2 init failed with error: {0}",
-                                Platform.SDL2.SDL.GetError());
+                                SDL.GetError());
                         }
                     }
                 }

@@ -31,6 +31,10 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2GraphicsContext : DesktopGraphicsContext
     {
+        private static readonly SDL SDL = SDL.GetAPI();
+
+        private static readonly GL GL = GL.GetAPI();
+
         private IWindowInfo Window { get; set; }
         private ContextHandle SdlContext { get; set; }
 
@@ -64,7 +68,7 @@ namespace OpenTK.Platform.SDL2
                 do
                 {
                     SetGLAttributes(mode, shareContext, major, minor, flags);
-                    SdlContext = new ContextHandle(SDL.GL.CreateContext(Window.Handle));
+                    SdlContext = new ContextHandle(GL.CreateContext(Window.Handle));
 
                     // If we failed to create a valid context, relax the GraphicsMode
                     // and try again.
@@ -94,45 +98,45 @@ namespace OpenTK.Platform.SDL2
             context_flags = 0;
 
             int accum_red, accum_green, accum_blue, accum_alpha;
-            SDL.GL.GetAttribute(ContextAttribute.ACCUM_RED_SIZE, out accum_red);
-            SDL.GL.GetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, out accum_green);
-            SDL.GL.GetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, out accum_blue);
-            SDL.GL.GetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, out accum_alpha);
+            GL.GetAttribute(ContextAttribute.ACCUM_RED_SIZE, out accum_red);
+            GL.GetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, out accum_green);
+            GL.GetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, out accum_blue);
+            GL.GetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, out accum_alpha);
 
             int buffers;
-            SDL.GL.GetAttribute(ContextAttribute.DOUBLEBUFFER, out buffers);
+            GL.GetAttribute(ContextAttribute.DOUBLEBUFFER, out buffers);
             // DOUBLEBUFFER return a boolean (0-false, 1-true), so we need
             // to adjust the buffer count (false->1 buffer, true->2 buffers)
             buffers++;
 
             int red, green, blue, alpha;
-            SDL.GL.GetAttribute(ContextAttribute.RED_SIZE, out red);
-            SDL.GL.GetAttribute(ContextAttribute.GREEN_SIZE, out green);
-            SDL.GL.GetAttribute(ContextAttribute.BLUE_SIZE, out blue);
-            SDL.GL.GetAttribute(ContextAttribute.ALPHA_SIZE, out alpha);
+            GL.GetAttribute(ContextAttribute.RED_SIZE, out red);
+            GL.GetAttribute(ContextAttribute.GREEN_SIZE, out green);
+            GL.GetAttribute(ContextAttribute.BLUE_SIZE, out blue);
+            GL.GetAttribute(ContextAttribute.ALPHA_SIZE, out alpha);
 
             int depth, stencil;
-            SDL.GL.GetAttribute(ContextAttribute.DEPTH_SIZE, out depth);
-            SDL.GL.GetAttribute(ContextAttribute.STENCIL_SIZE, out stencil);
+            GL.GetAttribute(ContextAttribute.DEPTH_SIZE, out depth);
+            GL.GetAttribute(ContextAttribute.STENCIL_SIZE, out stencil);
 
             int samples;
-            SDL.GL.GetAttribute(ContextAttribute.MULTISAMPLESAMPLES, out samples);
+            GL.GetAttribute(ContextAttribute.MULTISAMPLESAMPLES, out samples);
 
             int stereo;
-            SDL.GL.GetAttribute(ContextAttribute.STEREO, out stereo);
+            GL.GetAttribute(ContextAttribute.STEREO, out stereo);
 
             int major, minor;
-            SDL.GL.GetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, out major);
-            SDL.GL.GetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, out minor);
+            GL.GetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, out major);
+            GL.GetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, out minor);
 
             int flags;
-            SDL.GL.GetAttribute(ContextAttribute.CONTEXT_FLAGS, out flags);
+            GL.GetAttribute(ContextAttribute.CONTEXT_FLAGS, out flags);
 
             int egl;
-            SDL.GL.GetAttribute(ContextAttribute.CONTEXT_EGL, out egl);
+            GL.GetAttribute(ContextAttribute.CONTEXT_EGL, out egl);
 
             int profile;
-            SDL.GL.GetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, out profile);
+            GL.GetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, out profile);
 
             if (egl != 0 && (profile & (int)ContextProfileFlags.ES) != 0)
             {
@@ -161,26 +165,26 @@ namespace OpenTK.Platform.SDL2
 
         private static void ClearGLAttributes()
         {
-            SDL.GL.SetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.ACCUM_RED_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.DOUBLEBUFFER, 0);
-            SDL.GL.SetAttribute(ContextAttribute.ALPHA_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.RED_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.GREEN_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.BLUE_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.DEPTH_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.MULTISAMPLEBUFFERS, 0);
-            SDL.GL.SetAttribute(ContextAttribute.MULTISAMPLESAMPLES, 0);
-            SDL.GL.SetAttribute(ContextAttribute.STENCIL_SIZE, 0);
-            SDL.GL.SetAttribute(ContextAttribute.STEREO, 0);
-            SDL.GL.SetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, 1);
-            SDL.GL.SetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, 0);
-            SDL.GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, 0);
-            SDL.GL.SetAttribute(ContextAttribute.CONTEXT_EGL, 0);
-            SDL.GL.SetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, 0);
-            SDL.GL.SetAttribute(ContextAttribute.SHARE_WITH_CURRENT_CONTEXT, 0);
+            GL.SetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.ACCUM_RED_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.DOUBLEBUFFER, 0);
+            GL.SetAttribute(ContextAttribute.ALPHA_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.RED_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.GREEN_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.BLUE_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.DEPTH_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.MULTISAMPLEBUFFERS, 0);
+            GL.SetAttribute(ContextAttribute.MULTISAMPLESAMPLES, 0);
+            GL.SetAttribute(ContextAttribute.STENCIL_SIZE, 0);
+            GL.SetAttribute(ContextAttribute.STEREO, 0);
+            GL.SetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, 1);
+            GL.SetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, 0);
+            GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, 0);
+            GL.SetAttribute(ContextAttribute.CONTEXT_EGL, 0);
+            GL.SetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, 0);
+            GL.SetAttribute(ContextAttribute.SHARE_WITH_CURRENT_CONTEXT, 0);
         }
 
         private static void SetGLAttributes(GraphicsMode mode,
@@ -193,44 +197,44 @@ namespace OpenTK.Platform.SDL2
 
             if (mode.AccumulatorFormat.BitsPerPixel > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, mode.AccumulatorFormat.Alpha);
-                SDL.GL.SetAttribute(ContextAttribute.ACCUM_RED_SIZE, mode.AccumulatorFormat.Red);
-                SDL.GL.SetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, mode.AccumulatorFormat.Green);
-                SDL.GL.SetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, mode.AccumulatorFormat.Blue);
+                GL.SetAttribute(ContextAttribute.ACCUM_ALPHA_SIZE, mode.AccumulatorFormat.Alpha);
+                GL.SetAttribute(ContextAttribute.ACCUM_RED_SIZE, mode.AccumulatorFormat.Red);
+                GL.SetAttribute(ContextAttribute.ACCUM_GREEN_SIZE, mode.AccumulatorFormat.Green);
+                GL.SetAttribute(ContextAttribute.ACCUM_BLUE_SIZE, mode.AccumulatorFormat.Blue);
             }
 
             if (mode.Buffers > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.DOUBLEBUFFER, mode.Buffers > 1 ? 1 : 0);
+                GL.SetAttribute(ContextAttribute.DOUBLEBUFFER, mode.Buffers > 1 ? 1 : 0);
             }
 
             if (mode.ColorFormat > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.ALPHA_SIZE, mode.ColorFormat.Alpha);
-                SDL.GL.SetAttribute(ContextAttribute.RED_SIZE, mode.ColorFormat.Red);
-                SDL.GL.SetAttribute(ContextAttribute.GREEN_SIZE, mode.ColorFormat.Green);
-                SDL.GL.SetAttribute(ContextAttribute.BLUE_SIZE, mode.ColorFormat.Blue);
+                GL.SetAttribute(ContextAttribute.ALPHA_SIZE, mode.ColorFormat.Alpha);
+                GL.SetAttribute(ContextAttribute.RED_SIZE, mode.ColorFormat.Red);
+                GL.SetAttribute(ContextAttribute.GREEN_SIZE, mode.ColorFormat.Green);
+                GL.SetAttribute(ContextAttribute.BLUE_SIZE, mode.ColorFormat.Blue);
             }
 
             if (mode.Depth > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.DEPTH_SIZE, mode.Depth);
+                GL.SetAttribute(ContextAttribute.DEPTH_SIZE, mode.Depth);
             }
 
             if (mode.Samples > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.MULTISAMPLEBUFFERS, 1);
-                SDL.GL.SetAttribute(ContextAttribute.MULTISAMPLESAMPLES, mode.Samples);
+                GL.SetAttribute(ContextAttribute.MULTISAMPLEBUFFERS, 1);
+                GL.SetAttribute(ContextAttribute.MULTISAMPLESAMPLES, mode.Samples);
             }
 
             if (mode.Stencil > 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.STENCIL_SIZE, 1);
+                GL.SetAttribute(ContextAttribute.STENCIL_SIZE, 1);
             }
 
             if (mode.Stereo)
             {
-                SDL.GL.SetAttribute(ContextAttribute.STEREO, 1);
+                GL.SetAttribute(ContextAttribute.STEREO, 1);
             }
 
             if (major > 0)
@@ -251,24 +255,24 @@ namespace OpenTK.Platform.SDL2
                     }
                 }
 
-                SDL.GL.SetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, major);
-                SDL.GL.SetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, minor);
+                GL.SetAttribute(ContextAttribute.CONTEXT_MAJOR_VERSION, major);
+                GL.SetAttribute(ContextAttribute.CONTEXT_MINOR_VERSION, minor);
             }
 
             if ((flags & GraphicsContextFlags.Debug) != 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.DEBUG);
+                GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.DEBUG);
             }
 
             /*
             if ((flags & GraphicsContextFlags.Robust) != 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.ROBUST_ACCESS_FLAG);
+                GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.ROBUST_ACCESS_FLAG);
             }
 
             if ((flags & GraphicsContextFlags.ResetIsolation) != 0)
             {
-                SDL.GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.RESET_ISOLATION_FLAG);
+                GL.SetAttribute(ContextAttribute.CONTEXT_FLAGS, ContextFlags.RESET_ISOLATION_FLAG);
             }
             */
 
@@ -276,7 +280,7 @@ namespace OpenTK.Platform.SDL2
                 if ((flags & GraphicsContextFlags.Embedded) != 0)
                 {
                     cpflags |= ContextProfileFlags.ES;
-                    SDL.GL.SetAttribute(ContextAttribute.CONTEXT_EGL, 1);
+                    GL.SetAttribute(ContextAttribute.CONTEXT_EGL, 1);
                 }
 
                 if ((flags & GraphicsContextFlags.ForwardCompatible) != 0)
@@ -286,7 +290,7 @@ namespace OpenTK.Platform.SDL2
 
                 if (cpflags != 0)
                 {
-                    SDL.GL.SetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, cpflags);
+                    GL.SetAttribute(ContextAttribute.CONTEXT_PROFILE_MASK, cpflags);
                 }
             }
 
@@ -294,7 +298,7 @@ namespace OpenTK.Platform.SDL2
             {
                 if (shareContext.IsCurrent)
                 {
-                    SDL.GL.SetAttribute(ContextAttribute.SHARE_WITH_CURRENT_CONTEXT, 1);
+                    GL.SetAttribute(ContextAttribute.SHARE_WITH_CURRENT_CONTEXT, 1);
                 }
                 else
                 {
@@ -305,12 +309,12 @@ namespace OpenTK.Platform.SDL2
 
         public static ContextHandle GetCurrentContext()
         {
-            return new ContextHandle(SDL.GL.GetCurrentContext());
+            return new ContextHandle(GL.GetCurrentContext());
         }
 
         public override void SwapBuffers()
         {
-            SDL.GL.SwapWindow(Window.Handle);
+            GL.SwapWindow(Window.Handle);
         }
 
         public override void MakeCurrent(IWindowInfo window)
@@ -318,11 +322,11 @@ namespace OpenTK.Platform.SDL2
             int result = 0;
             if (window != null)
             {
-                result = SDL.GL.MakeCurrent(window.Handle, SdlContext.Handle);
+                result = GL.MakeCurrent(window.Handle, SdlContext.Handle);
             }
             else
             {
-                result = SDL.GL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
+                result = GL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
             }
 
             if (result < 0)
@@ -333,7 +337,7 @@ namespace OpenTK.Platform.SDL2
 
         public override IntPtr GetAddress(IntPtr function)
         {
-            return SDL.GL.GetProcAddress(function);
+            return GL.GetProcAddress(function);
         }
 
         public override bool IsCurrent
@@ -348,11 +352,11 @@ namespace OpenTK.Platform.SDL2
         {
             get
             {
-                return SDL.GL.GetSwapInterval();
+                return GL.GetSwapInterval();
             }
             set
             {
-                if (SDL.GL.SetSwapInterval(value) < 0)
+                if (GL.SetSwapInterval(value) < 0)
                 {
                     Debug.Print("SDL2 failed to set swap interval: {0}", SDL.GetError());
                 }
@@ -368,7 +372,7 @@ namespace OpenTK.Platform.SDL2
                     Debug.Print("Disposing {0} (handle: {1})", GetType(), Handle);
                     lock (SDL.Sync)
                     {
-                        SDL.GL.DeleteContext(SdlContext.Handle);
+                        GL.DeleteContext(SdlContext.Handle);
                     }
                 }
                 else
