@@ -167,41 +167,43 @@ namespace OpenTK.Platform.SDL2
             return GetWindowWMInfoInternal(window, ref info);
         }
 
-        public abstract partial class GL : NativeLibraryBase, IGLVideo
-        {
-            public IntPtr GetProcAddress(string proc)
-            {
-                IntPtr p = Marshal.StringToHGlobalAnsi(proc);
-                try
-                {
-                    return GetProcAddress(p);
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(p);
-                }
-            }
-
-            public int SetAttribute(Attribute attr, ContextFlags value)
-            {
-                return SetAttribute(attr, (int) value);
-            }
-            public int SetAttribute(Attribute attr, ContextProfileFlags value)
-            {
-                return SetAttribute(attr, (int) value);
-            }
-            public static GL GetAPI()
-            {
-                return APILoader.Load<GL, SDL2LibraryNameController>();
-            }
-        }
+        
 
         public static SDL GetAPI()
         {
             return APILoader.Load<SDL, SDL2LibraryNameController>();
         }
     }
+    public abstract partial class GL : NativeLibraryBase, IGLVideo
+    {
+        public IntPtr GetProcAddress(string proc)
+        {
+            IntPtr p = Marshal.StringToHGlobalAnsi(proc);
+            try
+            {
+                return GetProcAddress(p);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(p);
+            }
+        }
 
+        public int SetAttribute(ContextAttribute attr, ContextFlags value)
+        {
+            return SetAttribute(attr, (int) value);
+        }
+
+        public int SetAttribute(ContextAttribute attr, ContextProfileFlags value)
+        {
+            return SetAttribute(attr, (int) value);
+        }
+
+        public static GL GetAPI()
+        {
+            return APILoader.Load<GL, SDL2LibraryNameController>();
+        }
+    }
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate int EventFilter(IntPtr userdata, IntPtr @event);
 }
