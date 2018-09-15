@@ -8,5 +8,8 @@ namespace OpenTK.Platform.SDL2
     {
         /// <inheritdoc/>
         public abstract IntPtr GetErrorInternal();
+
+        /// <inheritdoc/>
+        public abstract void ClearError();
     }
 }
