@@ -60,6 +60,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="joystick">the joystick handle obtained from <see cref="JoystickOpen()"/></param>
         /// <returns>Returns the name of the selected joystick. If no name can be found, 
         /// this function returns NULL; call <see cref="GetError()"/>for more information. </returns>
+        [NativeSymbol("JoystickName")]
         IntPtr JoystickNameInternal(IntPtr joystick);
 
         /// <summary>

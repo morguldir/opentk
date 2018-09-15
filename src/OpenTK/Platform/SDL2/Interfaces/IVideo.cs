@@ -115,6 +115,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="info">an <see cref="SysWMInfo"/> structure filled in with window information; see Remarks for details</param>
         /// <returns></returns>
         /// <remarks>The info structure must be initialized with the SDL version, and is then filled in with information about the given window</remarks>
+        [NativeSymbol("GetWindowWMInfo")]
         bool GetWindowWMInfoInternal(IntPtr window, ref SysWMInfo info);
 
         /// <summary>

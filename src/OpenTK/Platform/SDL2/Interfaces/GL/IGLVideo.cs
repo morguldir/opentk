@@ -3,6 +3,7 @@ using AdvancedDLSupport;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
+    [NativeSymbols(Prefix = "SDL_GL_")]
     internal partial interface IGLVideo
     {
         /// <summary>
@@ -11,14 +12,12 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="window">the window to associate with the context.</param>
         /// <returns>Returns the OpenGL context associated with window or <see cref="IntPtr.Zero"/> on error; call <see
         /// cref="ISDL2.GetError()"/> for more details. </returns>
-        [NativeSymbol("GL_CreateContext")]
         IntPtr CreateContext(IntPtr window);
 
         /// <summary>
         /// Use this function to delete an OpenGL context. 
         /// </summary>
         /// <param name="context">the OpenGL context to be deleted.</param>
-        [NativeSymbol("GL_DeleteContext")]
         void DeleteContext(IntPtr context);
 
         /// <summary>
@@ -28,7 +27,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="value">a pointer filled in with the current value of attr.</param>
         /// <returns>Returns 0 on success or a negative error code on failure; 
         /// call <see cref="GetError()"/> for more information. </returns>
-        [NativeSymbol("GL_GetAttribute")]
         int GetAttribute(Attribute attr, out int value);
 
         /// <summary>
@@ -36,7 +34,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// </summary>
         /// <returns>Returns the currently active OpenGL context or <see cref="IntPtr.Zero"/> on failure; 
         /// call <see cref="GetError()"/> for more information.</returns>
-        [NativeSymbol("GL_GetCurrentContext")]
         IntPtr GetCurrentContext();
 
         /// <summary>
@@ -45,7 +42,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="window">the window from which the drawable size should be queried</param>
         /// <param name="w"></param>
         /// <param name="h"></param>
-        [NativeSymbol("GL_GetDrawableSize")]
         void GetDrawableSize(IntPtr window, out int w, out int h);
 
         /// <summary>
@@ -53,7 +49,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// </summary>
         /// <param name="proc">the name of an OpenGL function</param>
         /// <returns>Returns a pointer to the named OpenGL function. The returned pointer should be cast to the appropriate function signature.</returns>
-        [NativeSymbol("GL_GetProcAddress")]
         IntPtr GetProcAddress(IntPtr proc);
 
         /// <summary>
@@ -61,7 +56,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// </summary>
         /// <returns>Returns 0 if there is no vertical retrace synchronization, 1 if the buffer swap is synchronized with the vertical retrace, and -1 if late swaps happen immediately instead of waiting for the next retrace; 
         /// call <see cref="GetError()"/> for more information. </returns>
-        [NativeSymbol("GL_GetSwapInterval")]
         int GetSwapInterval();
 
         /// <summary>
@@ -70,7 +64,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="window">the window to associate with the context</param>
         /// <param name="context">the OpenGL context to associate with the window</param>
         /// <returns>Returns 0 on success or a negative error code on failure; call <see cref="GetError()"/> for more information. </returns>
-        [NativeSymbol("GL_MakeCurrent")]
         int MakeCurrent(IntPtr window, IntPtr context);
 
         /// <summary>
@@ -78,8 +71,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// </summary>
         /// <param name="attr">the OpenGL attribute to set; see <see cref="Attribute"/> for details</param>
         /// <param name="value">the desired value for the attribute</param>
-        /// <returns></returns>
-        [NativeSymbol("GL_SetAttribute")]
+        /// <returns></returns>        
         int SetAttribute(Attribute attr, int value);
 
         /// <summary>
@@ -91,6 +83,7 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// Adaptive vsync works the same as vsync, but if you've already missed the vertical retrace for a given frame, it swaps buffers immediately, which might be less
         ///  jarring for the user during occasional framerate drops. If application requests adaptive vsync and the system does not support it, this function will fail and return -1.
         ///  In such a case, you should probably retry the call with 1 for the interval. </remarks>
+        int SetSwapInterval(int interval);
 
         /// <summary>
         /// Use this function to update a window with OpenGL rendering. 
@@ -98,7 +91,6 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <param name="window">the window to change.</param>
         /// <remarks>This is used with double-buffered OpenGL contexts, which are the default.
         /// On Mac OS X make sure you bind 0 to the draw framebuffer before swapping the window, otherwise nothing will happen.</remarks>
-        [NativeSymbol("GL_SwapWindow")]
         void SwapWindow(IntPtr window);
     }
 }
