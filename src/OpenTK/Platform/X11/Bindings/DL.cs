@@ -32,7 +32,7 @@ namespace OpenTK.Platform.X11
 {
     internal class DL
     {
-        private const string lib = "dl";
+        private const string lib = "libdl.so.2";
 
         [DllImport(lib, EntryPoint = "dlopen")]
         internal static extern IntPtr Open(string filename, DLOpenFlags flags);
