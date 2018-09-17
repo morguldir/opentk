@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
   <PropertyGroup>
     <AssemblyName>OpenTK</AssemblyName>
     <PackageVersion>1.0.4</PackageVersion>
@@ -699,7 +699,7 @@
     <Compile Include="Loader\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AdvancedDLSupport" Version="3.2.1" />
+    <PackageReference Include="AdvancedDLSupport" Version="2.3.0" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
