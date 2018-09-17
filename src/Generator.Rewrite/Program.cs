@@ -105,6 +105,7 @@ namespace OpenTK.Rewrite
                     return;
                 }
 
+                resolver.AddSearchDirectory(Path.Combine("../../packages", "AdvancedDLSupport", "lib", "netstandard2.0"));
                 resolver.AddSearchDirectory(searchPath);
                 read_params.AssemblyResolver = resolver;
             }

@@ -15,7 +15,8 @@ namespace OpenTK.Loader
             _options = ImplementationOptions.EnableOptimizations |
                        ImplementationOptions.SuppressSecurity |
                        ImplementationOptions.GenerateDisposalChecks |
-                       ImplementationOptions.EnableDllMapSupport;
+                       ImplementationOptions.EnableDllMapSupport |
+                       ImplementationOptions.UseIndirectCalls;
             _builder = new NativeLibraryBuilder(_options);
         }
         /// <summary>
