@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>OpenTK</AssemblyName>
-    <PackageVersion>1.0.8</PackageVersion>
+    <PackageVersion>4.0.13</PackageVersion>
     <PackageId>ppy.OpenTK.NS20</PackageId>
     <Title>ppy.OpenTK.NS20</Title>
     <PackageProjectUrl>https://github.com/ppy/opentk/tree/netstandard</PackageProjectUrl>
@@ -701,11 +702,19 @@
   <ItemGroup>
     <PackageReference Include="AdvancedDLSupport" Version="2.3.0" />
   </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="$(MSBuildThisFileDirectory)..\Generator.Rewrite\bin\Debug\Rewrite.exe -a $(OutputPath)OpenTK.dll -k $(MSBuildThisFileDirectory)..\..\OpenTK.snk --debug --netstandard" Condition="$(OS) == 'Windows_NT' and $(Configuration) == 'Debug'" />
     <Exec Command="$(MSBuildThisFileDirectory)..\Generator.Rewrite\bin\Release\Rewrite.exe -a $(OutputPath)OpenTK.dll -k $(MSBuildThisFileDirectory)..\..\OpenTK.snk --netstandard" Condition="$(OS) == 'Windows_NT' and $(Configuration) == 'Release'" />
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Debug/Rewrite.exe -a $(OutputPath)OpenTK.dll --debug --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Debug'" />
     <Exec Command="mono $(MSBuildThisFileDirectory)../Generator.Rewrite/bin/Release/Rewrite.exe -a $(OutputPath)OpenTK.dll --netstandard" Condition="$(OS) != 'Windows_NT' and $(Configuration) == 'Release'" />
   </Target>
+  <ItemGroup>
+    <Content Include="bin/$(Configuration)/netstandard2.0/AOT/*" copyToOutput="Always">
+      <Pack>true</Pack>
+      <IncludeInPackage>true</IncludeInPackage>
+      <PackagePath>lib/netstandard2.0</PackagePath>
+      <CopyToOutputDirectory>true</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

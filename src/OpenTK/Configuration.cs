@@ -219,6 +219,7 @@ namespace OpenTK
             {
                 Debug.Print("SDL2 is supported. Version is {0}.{1}.{2}",
                     version.Major, version.Minor, version.Patch);
+                Platform.SDL2.SDLApi.ActivateAOT();
             }
 
             return supported;
