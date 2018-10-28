@@ -29,7 +29,7 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2Keyboard : IKeyboardDriver2
     {
-        private static readonly SDL SDL = SDL.GetAPI();
+        private static readonly SDL SDL = SDLApi.SDL;
 
         #pragma warning disable 649 // Field never assigned to, compiler bug in Mono 3.4.0
         private KeyboardState state;

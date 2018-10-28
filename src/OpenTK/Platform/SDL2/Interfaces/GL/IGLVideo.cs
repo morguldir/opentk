@@ -1,9 +1,10 @@
 using System;
 using AdvancedDLSupport;
+using AdvancedDLSupport.AOT;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
-    [NativeSymbols(Prefix = "SDL_GL_")]
+    [NativeSymbols(Prefix = "SDL_GL_"), AOTType]
     internal partial interface IGLVideo
     {
         /// <summary>

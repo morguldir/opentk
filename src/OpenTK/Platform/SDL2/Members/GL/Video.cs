@@ -4,11 +4,8 @@ using OpenTK.Platform.SDL2.Interfaces;
 
 namespace OpenTK.Platform.SDL2
 {
-    public abstract partial class GL : NativeLibraryBase, IGLVideo
+    public abstract partial class SDL : NativeLibraryBase, IGLVideo
     {
-        protected GL(string path, ImplementationOptions options) : base(path, options)
-        { }
-
         /// <inheritdoc />
         public abstract IntPtr CreateContext(IntPtr window);
 

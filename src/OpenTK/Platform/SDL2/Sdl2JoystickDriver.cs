@@ -33,7 +33,7 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2JoystickDriver : IJoystickDriver2, IGamePadDriver, IDisposable
     {
-        private static readonly SDL SDL = SDL.GetAPI();
+        private static readonly SDL SDL = SDLApi.SDL;
 
         private const float RangeMultiplier =  1.0f / 32768.0f;
         private readonly MappedGamePadDriver gamepad_driver = new MappedGamePadDriver();

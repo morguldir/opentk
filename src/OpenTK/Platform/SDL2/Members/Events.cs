@@ -19,6 +19,9 @@ namespace OpenTK.Platform.SDL2
         public abstract void DelEventWatch(IntPtr filter, IntPtr userdata);
 
         /// <inheritdoc />
+        public abstract bool HasEvents(int minType, int maxType);
+
+        /// <inheritdoc />
         public abstract int PollEvent(out Event e);
 
         /// <inheritdoc />

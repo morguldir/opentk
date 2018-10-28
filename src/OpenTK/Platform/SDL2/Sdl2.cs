@@ -24,6 +24,7 @@
 //
 
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Security;
 using System.Runtime.InteropServices;
@@ -38,7 +39,36 @@ namespace OpenTK.Platform.SDL2
     using Surface = IntPtr;
     using Cursor = IntPtr;
 
-    public abstract partial class SDL : NativeLibraryBase, ISDL2
+    public class SDLApi
+    {
+        internal static readonly SDL SDL = SDL.GetAPI();
+
+        internal static void ActivateAOT()
+        {
+            bool run = false;
+            if (run != false)
+            {
+                return;
+            }
+            var AOTPaths = (string)AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES");
+            foreach (var AOTPath in AOTPaths.Split(':'))
+            {
+                try
+                {
+                    NativeLibraryBuilder.DiscoverCompiledTypes(AOTPath);
+                }
+                catch(Exception)
+                {
+
+                }
+                finally
+                {
+                    run = true;
+                }
+            }
+        }
+    }
+    public abstract partial class SDL : NativeLibraryBase, ISDL2, IGLVideo
     {
         /// <inheritdoc cref="NativeLibraryBase"/> 
         protected SDL(string path, ImplementationOptions options) : base(path, options)
@@ -167,16 +197,11 @@ namespace OpenTK.Platform.SDL2
             return GetWindowWMInfoInternal(window, ref info);
         }
 
-        
-
         public static SDL GetAPI()
         {
             return APILoader.Load<SDL, SDL2LibraryNameController>();
         }
-    }
-    public abstract partial class GL : NativeLibraryBase, IGLVideo
-    {
-        public IntPtr GetProcAddress(string proc)
+                public IntPtr GetProcAddress(string proc)
         {
             IntPtr p = Marshal.StringToHGlobalAnsi(proc);
             try
@@ -197,11 +222,6 @@ namespace OpenTK.Platform.SDL2
         public int SetAttribute(ContextAttribute attr, ContextProfileFlags value)
         {
             return SetAttribute(attr, (int) value);
-        }
-
-        public static GL GetAPI()
-        {
-            return APILoader.Load<GL, SDL2LibraryNameController>();
         }
     }
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

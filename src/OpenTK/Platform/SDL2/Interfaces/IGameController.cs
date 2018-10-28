@@ -1,9 +1,10 @@
 using System;
 using AdvancedDLSupport;
+using AdvancedDLSupport.AOT;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
-    [NativeSymbols(Prefix = "SDL_")]
+    [NativeSymbols(Prefix = "SDL_"), AOTType]
     internal interface IGameController
     {
         /// <summary>

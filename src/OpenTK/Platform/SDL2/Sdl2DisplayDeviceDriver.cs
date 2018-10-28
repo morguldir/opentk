@@ -30,7 +30,7 @@ namespace OpenTK.Platform.SDL2
 {
     internal class Sdl2DisplayDeviceDriver : DisplayDeviceBase
     {
-        private static readonly SDL SDL = SDL.GetAPI();
+        private static readonly SDL SDL = SDLApi.SDL;
 
         public Sdl2DisplayDeviceDriver()
         {

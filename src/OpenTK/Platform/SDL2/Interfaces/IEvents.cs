@@ -1,9 +1,10 @@
 using System;
 using AdvancedDLSupport;
+using AdvancedDLSupport.AOT;
 
 namespace OpenTK.Platform.SDL2.Interfaces
 {
-    [NativeSymbols(Prefix = "SDL_")]
+    [NativeSymbols(Prefix = "SDL_"), AOTType]
     internal interface IEvents
     {
         /// <summary>
@@ -46,6 +47,14 @@ namespace OpenTK.Platform.SDL2.Interfaces
         /// <returns>Returns the number of events actually stored or a negative error code on failure; 
         /// call <see cref="GetError()"/> for more information. </returns>
         unsafe int PeepEvents(Event * events, int count, EventAction action, EventType min, EventType max);
+
+        /// <summary>
+        /// Use this function to check for the existence of a range of event types in the event queue. 
+        /// </summary>
+        /// <param name="minType">the minimum type of event to be queried</param>
+        /// <param name="maxType">the maximum type of event to be queried</param>
+        /// <returns>Returns <c>true</c> if events with types in the range between minType and maxType are present, or <c>false</c> if not. </returns>
+        bool HasEvents(int minType, int maxType);
 
         /// <summary>
         /// Use this function to poll for currently pending events. 
